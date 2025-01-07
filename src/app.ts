@@ -7,6 +7,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+// @ts-ignore
 app.use(auth);
 
 app.use('/users', userRoutes);
