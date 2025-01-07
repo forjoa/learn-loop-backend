@@ -1,7 +1,10 @@
 import express from "express";
 import cors from "cors";
-import userRoutes from "./modules/users/user.routes";
+
 import {auth} from "./middleware/auth";
+
+import userRoutes from "./modules/users/user.routes";
+import topicRoutes from "./modules/topics/topic.routes";
 
 const app = express();
 
@@ -11,5 +14,6 @@ app.use(express.json());
 app.use(auth);
 
 app.use('/users', userRoutes);
+app.use('/topics', topicRoutes);
 
 export default app;
