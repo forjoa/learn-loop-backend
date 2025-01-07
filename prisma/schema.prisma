@@ -24,6 +24,8 @@ model user {
 
   sent_messages message[] @relation("SentMessages")
   received_messages message[] @relation("ReceivedMessages")
+
+  topic topic[]
 }
 
 // topics
@@ -33,6 +35,9 @@ model topic {
   description String?  @map("description")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
+
+  ownerId     Int      @map("owner_id") // El propietario del topic (Teacher)
+  owner       user     @relation(fields: [ownerId], references: [id])
 
   users       enrollment[]
   posts       post[]
