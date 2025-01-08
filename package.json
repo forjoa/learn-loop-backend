@@ -4,10 +4,8 @@
   "main": "index.js",
   "scripts": {
     "build": "rimraf dist && npx tsc",
-    "prestart": "npm run build",
-    "start": "node dist/server.js",
-    "preserve": "npm run build",
-    "serve": "concurrently \"npx tsc -w\"  \"nodemon dist/server.js\""
+    "start": "node -r tsconfig-paths/register dist/server.js",
+    "serve": "concurrently \"npx tsc -w\"  \"nodemon -r tsconfig-paths/register dist/server.js\""
   },
   "keywords": [],
   "author": "",
