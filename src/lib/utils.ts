@@ -4,5 +4,5 @@ export const generateToken = (userId: number, role: string) => {
     const secret = "super_secret";
     const expiresIn = "1h";
 
-    return
+    return jwt.sign({userId, role}, secret, {expiresIn});
 }
