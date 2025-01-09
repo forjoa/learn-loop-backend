@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
-import {acceptEnrollmentSchema, createEnrollmentSchema} from "./enrollment.model";
-import {acceptEnrollment, createEnrollment} from "./enrollment.service";
+import {acceptEnrollmentSchema, createEnrollmentSchema, denyEnrollmentSchema} from "./enrollment.model";
+import {acceptEnrollment, createEnrollment, denyEnrollment} from "./enrollment.service";
 
 export const handleCreateEnrollment = async (req: Request, res: Response) => {
     try {
@@ -36,6 +36,30 @@ export const handleAcceptEnrollment = async (req: Request, res: Response) => {
 
         return res.status(200).json({
             message: 'Enrollment accepted successfully',
+            data: enrollment
+        })
+    } catch (error) {
+        if (error instanceof Error && 'issues' in error) {
+            return res.status(400).json({
+                message: 'Validation error',
+                details: error.issues
+            })
+        }
+
+        return res.status(500).json({message: 'Internal server error'})
+    }
+}
+
+export const handleDenyEnrollment = async (req: Request, res: Response) => {
+    try {
+        // validate request body using zod
+        const validateData = denyEnrollmentSchema.parse(req.body)
+
+        // call service to deny
+        const enrollment = await denyEnrollment(validateData)
+
+        return res.status(200).json({
+            message: 'Enrollment denied successfully',
             data: enrollment
         })
     } catch (error) {
