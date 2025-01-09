@@ -14,3 +14,10 @@ export const acceptEnrollmentSchema = z.object({
 })
 
 export type AcceptEnrollmentSchema = z.infer<typeof acceptEnrollmentSchema>
+
+export const denyEnrollmentSchema = z.object({
+    id: z.number(),
+    status: z.enum(["PENDING", "APPROVED", "REJECTED"]).default("REJECTED")
+})
+
+export type DenyEnrollmentSchema = z.infer<typeof denyEnrollmentSchema>
