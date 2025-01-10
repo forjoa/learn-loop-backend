@@ -7,6 +7,7 @@ import userRoutes from "./modules/users/user.routes";
 import topicRoutes from "./modules/topics/topic.routes";
 import authRoute from "./modules/auth/auth.route";
 import enrollmentRoutes from "./modules/enrollments/enrollment.routes";
+import messageRoutes from "./modules/messages/message.routes";
 
 const app = express();
 
@@ -22,5 +23,6 @@ app.use(auth);
 app.use('/users', userRoutes);
 app.use('/topics', topicRoutes);
 app.use('/enrollment', enrollmentRoutes);
+app.use('/messages', messageRoutes);
 
 export default app;
