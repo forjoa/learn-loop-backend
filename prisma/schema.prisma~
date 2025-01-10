@@ -45,7 +45,7 @@ model topic {
   chats       chat[]
 }
 
-// users and topics (enrollment)
+// users and topics (enrollments)
 model enrollment {
   id      Int   @id @default(autoincrement()) @map("id")
   userId  Int   @map("user_id")

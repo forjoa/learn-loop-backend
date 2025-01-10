@@ -23,7 +23,6 @@ model user {
   files       file[]
 
   sent_messages message[] @relation("SentMessages")
-  received_messages message[] @relation("ReceivedMessages")
 
   topic topic[]
 }
@@ -104,11 +103,9 @@ model message {
   id         Int      @id @default(autoincrement()) @map("id")
   content    String   @map("content")
   senderId   Int      @map("sender_id")
-  receiverId Int?     @map("receiver_id")
   createdAt  DateTime @default(now()) @map("created_at")
 
   sender   user   @relation("SentMessages", fields: [senderId], references: [id])
-  receiver user?  @relation("ReceivedMessages", fields: [receiverId], references: [id])
 
   chatId   Int?   @map("chat_id")
   chat     chat?  @relation(fields: [chatId], references: [id])
