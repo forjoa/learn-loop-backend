@@ -25,6 +25,8 @@ model user {
   sent_messages message[] @relation("SentMessages")
 
   topic topic[]
+
+  chat_member chat_member[]
 }
 
 // topics
@@ -89,13 +91,25 @@ model post {
 
 // chats
 model chat {
-  id        Int      @id @default(autoincrement()) @map("id")
-  topicId   Int      @map("topic_id")
-  createdAt DateTime @default(now()) @map("created_at")
+  id        Int           @id @default(autoincrement()) @map("id")
+  topicId   Int           @map("topic_id")
+  createdAt DateTime      @default(now()) @map("created_at")
 
-  topic topic @relation(fields: [topicId], references: [id])
+  topic     topic         @relation(fields: [topicId], references: [id])
+  messages  message[]
+  members   chat_member[] // Relación con chat_member
+}
 
-  messages message[]
+model chat_member {
+  id       Int      @id @default(autoincrement()) @map("id")
+  chatId   Int      @map("chat_id")
+  userId   Int      @map("user_id")
+  joinedAt DateTime @default(now()) @map("joined_at")
+
+  chat chat @relation(fields: [chatId], references: [id])
+  user user @relation(fields: [userId], references: [id])
+
+  @@unique([chatId, userId]) // Asegura que un usuario no se repita en el mismo chat
 }
 
 // messages
