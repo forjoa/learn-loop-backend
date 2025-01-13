@@ -27,6 +27,8 @@ model user {
   topic topic[]
 
   chat_member chat_member[]
+
+  notification notification[]
 }
 
 // topics
@@ -87,6 +89,18 @@ model post {
 
   topicId  Int    @map("topic_id")
   topic    topic  @relation(fields: [topicId], references: [id])
+}
+
+// notifications
+model notification {
+  id        Int      @id @default(autoincrement()) @map("id")
+  userId    Int      @map("user_id")
+  title     String   @map("title")
+  content   String   @map("content")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user user @relation(fields: [userId], references: [id])
 }
 
 // chats
