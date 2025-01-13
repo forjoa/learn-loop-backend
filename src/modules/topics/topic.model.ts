@@ -7,3 +7,9 @@ export const createTopicSchema = z.object({
 })
 
 export type CreateTopicInput = z.infer<typeof createTopicSchema>
+
+export const getAllOwnerTopicsSchema = z.object({
+    ownerId: z.number()
+})
+
+export type GetAllOwnerTopicsSchema = z.infer<typeof getAllOwnerTopicsSchema>
