@@ -1,9 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import { createServer } from 'node:http'
-import { Server } from 'socket.io'
 
-// helpers
 import { auth } from './middleware/auth'
 
 // routes
@@ -33,17 +30,4 @@ app.use('/chatMembers', chatMemberRoutes)
 app.use('/messages', messageRoutes)
 app.use('/notification', notificationRoutes)
 
-// socket init
-const httpServer = createServer(app)
-const io = new Server(httpServer, {
-    cors: {
-        origin: '*',
-        methods: [ 'GET', 'POST' ]
-    }
-})
-
-import socketHandler from './socket'
-
-socketHandler(io)
-
-export default httpServer
+export default app

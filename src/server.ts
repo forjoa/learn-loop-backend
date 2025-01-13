@@ -1,5 +1,5 @@
-import app from './app'
+import httpServer from './app'
 
-app.listen(8000, () => {
+httpServer.listen(8000, () => {
     console.log('Server is running on port 8000')
 })
