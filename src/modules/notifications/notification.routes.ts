@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { handleCreateNotification, handleGetNotifications } from './notification.controller'
+import { handleCreateNotification, handleDeleteNotification, handleGetNotifications } from './notification.controller'
 
 const router = Router()
 
@@ -7,5 +7,7 @@ const router = Router()
 router.post('/create', handleCreateNotification)
 // @ts-ignore
 router.get('/get', handleGetNotifications)
+// @ts-ignore
+router.delete('/delete', handleDeleteNotification)
 
 export default router
