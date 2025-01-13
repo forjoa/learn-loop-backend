@@ -1,10 +1,11 @@
 import { Router } from 'express'
-import { handleCreateTopic } from './topic.controller'
+import { handleCreateTopic, handleGetAllTopicsByOwner } from './topic.controller'
 
 const router = Router()
 
-// create topic endpoint
 // @ts-ignore
 router.post('/', handleCreateTopic)
+// @ts-ignore
+router.get('/getAllByOwner', handleGetAllTopicsByOwner)
 
 export default router
