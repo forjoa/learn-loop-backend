@@ -35,7 +35,7 @@ export const handleGetMessages = async (req: Request, res: Response) => {
         const messages = await getMessages(validateData)
 
         return res.status(200).json({
-            messages
+            ...messages
         })
     } catch (error) {
         if (error instanceof Error && 'issues' in error) {
