@@ -1,7 +1,7 @@
-import prisma from "../../config/db";
-import {CreateUserInput, LoginUserInput} from "../users/user.model";
-import bcrypt from "bcryptjs";
-import {generateToken} from "../../lib/utils";
+import prisma from '../../config/db'
+import { CreateUserInput, LoginUserInput } from '../users/user.model'
+import bcrypt from 'bcryptjs'
+import { generateToken } from '../../lib/utils'
 
 export const createUser = async (user: CreateUserInput) => {
     const hashedPassword = await bcrypt.hash(user.password, 10)

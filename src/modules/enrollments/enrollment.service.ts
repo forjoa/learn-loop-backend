@@ -1,5 +1,5 @@
-import {AcceptEnrollmentSchema, CreateEnrollmentSchema, DenyEnrollmentSchema} from "./enrollment.model";
-import prisma from "../../config/db";
+import { AcceptEnrollmentSchema, CreateEnrollmentSchema, DenyEnrollmentSchema } from './enrollment.model'
+import prisma from '../../config/db'
 
 export const createEnrollment = async (enrollment: CreateEnrollmentSchema) => {
     return prisma.enrollment.create({data: enrollment})

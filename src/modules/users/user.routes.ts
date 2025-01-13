@@ -1,9 +1,9 @@
-import {Router} from "express";
-import {handleEditUser} from "./user.controller";
+import { Router } from 'express'
+import { handleEditUser } from './user.controller'
 
-const router = Router();
+const router = Router()
 
 // @ts-ignore
 router.post('/edit', handleEditUser)
 
-export default router;
+export default router

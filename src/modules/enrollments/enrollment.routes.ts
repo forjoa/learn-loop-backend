@@ -1,7 +1,7 @@
-import {Router} from "express";
-import {handleAcceptEnrollment, handleCreateEnrollment, handleDenyEnrollment} from "./enrollment.controller";
+import { Router } from 'express'
+import { handleAcceptEnrollment, handleCreateEnrollment, handleDenyEnrollment } from './enrollment.controller'
 
-const router = Router();
+const router = Router()
 
 // @ts-ignore
 router.post('/create', handleCreateEnrollment)
@@ -10,4 +10,4 @@ router.post('/accept', handleAcceptEnrollment)
 // @ts-ignore
 router.post('/deny', handleDenyEnrollment)
 
-export default router;
+export default router

@@ -1,11 +1,11 @@
-import {Router} from "express";
-import {handleCreateChatMember, handleDeleteChatMember} from "./chatMember.controller";
+import { Router } from 'express'
+import { handleCreateChatMember, handleDeleteChatMember } from './chatMember.controller'
 
-const router = Router();
+const router = Router()
 
 // @ts-ignore
-router.post('/create', handleCreateChatMember);
+router.post('/create', handleCreateChatMember)
 // @ts-ignore
-router.post('/delete', handleDeleteChatMember);
+router.post('/delete', handleDeleteChatMember)
 
-export default router;
+export default router

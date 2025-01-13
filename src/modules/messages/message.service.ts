@@ -1,5 +1,5 @@
-import {CreateMessageSchema, GetMessagesSchema} from "./message.model";
-import prisma from "../../config/db";
+import { CreateMessageSchema, GetMessagesSchema } from './message.model'
+import prisma from '../../config/db'
 
 export const createMessage = async (message: CreateMessageSchema) => {
     return prisma.message.create({data: message})
@@ -24,7 +24,7 @@ export const getMessages = async (chat: GetMessagesSchema) => {
             },
         },
         orderBy: {
-            createdAt: "asc",
+            createdAt: 'asc',
         },
-    });
+    })
 }

@@ -1,6 +1,6 @@
-import {Request, Response} from "express";
-import {acceptEnrollmentSchema, createEnrollmentSchema, denyEnrollmentSchema} from "./enrollment.model";
-import {acceptEnrollment, createEnrollment, denyEnrollment} from "./enrollment.service";
+import { Request, Response } from 'express'
+import { acceptEnrollmentSchema, createEnrollmentSchema, denyEnrollmentSchema } from './enrollment.model'
+import { acceptEnrollment, createEnrollment, denyEnrollment } from './enrollment.service'
 
 export const handleCreateEnrollment = async (req: Request, res: Response) => {
     try {

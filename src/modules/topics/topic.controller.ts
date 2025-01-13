@@ -1,14 +1,14 @@
-import {Request, Response} from "express";
-import {createTopicSchema} from "./topic.model";
-import {createTopic} from "./topic.service";
+import { Request, Response } from 'express'
+import { createTopicSchema } from './topic.model'
+import { createTopic } from './topic.service'
 
 export const handleCreateTopic = async (req: Request, res: Response) => {
     try {
         // validate request body using zod
-        const validateData = createTopicSchema.parse(req.body);
+        const validateData = createTopicSchema.parse(req.body)
 
         // call service to create user
-        const topic = await createTopic(validateData);
+        const topic = await createTopic(validateData)
 
         return res.status(201).json({
             message: 'Topic created successfully',

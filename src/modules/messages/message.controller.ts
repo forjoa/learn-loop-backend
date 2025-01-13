@@ -1,6 +1,6 @@
-import {Request, Response} from "express";
-import {createMessageSchema, getMessagesSchema} from "./message.model";
-import {createMessage, getMessages} from "./message.service";
+import { Request, Response } from 'express'
+import { createMessageSchema, getMessagesSchema } from './message.model'
+import { createMessage, getMessages } from './message.service'
 
 export const handleCreateMessage = async (req: Request, res: Response) => {
     try {
@@ -30,7 +30,7 @@ export const handleGetMessages = async (req: Request, res: Response) => {
     try {
         const chatId = Number(req.query['chatId'])
         // validate request body with zod
-        const validateData = getMessagesSchema.parse({ chatId })
+        const validateData = getMessagesSchema.parse({chatId})
 
         // call service to get all conversation messages
         const messages = await getMessages(validateData)
