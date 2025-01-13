@@ -35,9 +35,9 @@ export const handleGetNotifications = async (req: Request, res: Response) => {
         // call service to get a notification
         const notifications = await getNofitications(validateData)
 
-        return res.status(200).json({
-            ...notifications
-        })
+        return res.status(200).json(
+            notifications
+        )
     } catch (error) {
         if (error instanceof Error && 'issues' in error) {
             return res.status(400).json({
