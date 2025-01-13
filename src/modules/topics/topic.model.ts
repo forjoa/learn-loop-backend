@@ -19,3 +19,9 @@ export const getAllTopicsByUserSchema = z.object({
 })
 
 export type GetAllTopicsByUser = z.infer<typeof getAllTopicsByUserSchema>
+
+export const deleteTopicSchema = z.object({
+    id: z.number()
+})
+
+export type DeleteTopic = z.infer<typeof deleteTopicSchema>

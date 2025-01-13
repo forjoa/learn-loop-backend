@@ -28,10 +28,10 @@ app.use(auth)
 
 app.use('/users', userRoutes)
 app.use('/topics', topicRoutes)
-app.use('/enrollment', enrollmentRoutes)
+app.use('/enrollments', enrollmentRoutes)
 app.use('/chatMembers', chatMemberRoutes)
 app.use('/messages', messageRoutes)
-app.use('/notification', notificationRoutes)
+app.use('/notifications', notificationRoutes)
 
 // socket init
 const httpServer = createServer(app)

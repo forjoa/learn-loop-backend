@@ -113,7 +113,7 @@ Asegúrate de tener instalado:
 ### Inscripciones
 
 #### Crear inscripción
-- **Ruta:** `POST /enrollment/create`
+- **Ruta:** `POST /enrollments/create`
 - **Body:**
   ```json
   {
@@ -124,7 +124,7 @@ Asegúrate de tener instalado:
   ```
 
 #### Aceptar inscripción
-- **Ruta:** `POST /enrollment/accept`
+- **Ruta:** `POST /enrollments/accept`
 - **Body:**
   ```json
   {
@@ -134,7 +134,7 @@ Asegúrate de tener instalado:
   ```
 
 #### Rechazar inscripción
-- **Ruta:** `POST /enrollment/deny`
+- **Ruta:** `POST /enrollments/deny`
 - **Body:**
   ```json
   {
@@ -183,10 +183,10 @@ Asegúrate de tener instalado:
 ### Notificaciones
 
 #### Obtener notificaciones
-- **Ruta:** `GET /notification/get?userId=number`
+- **Ruta:** `GET /notifications/get?userId=number`
 
 #### Crear notificación
-- **Ruta:** `POST /notification/create`
+- **Ruta:** `POST /notifications/create`
 - **Body:**
   ```json
   {

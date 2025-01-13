@@ -1,6 +1,11 @@
 import { Request, Response } from 'express'
-import { createTopicSchema, getAllTopicsByOwnerSchema, getAllTopicsByUserSchema } from './topic.model'
-import { createTopic, getAllTopicsByOwner, getAllTopicsByUser } from './topic.service'
+import {
+    createTopicSchema,
+    deleteTopicSchema,
+    getAllTopicsByOwnerSchema,
+    getAllTopicsByUserSchema
+} from './topic.model'
+import { createTopic, deleteTopic, getAllTopicsByOwner, getAllTopicsByUser } from './topic.service'
 
 export const handleCreateTopic = async (req: Request, res: Response) => {
     try {
@@ -62,6 +67,31 @@ export const handleGetAllTopicsByUser = async (req: Request, res: Response) => {
         return res.status(201).json(
             topics
         )
+    } catch (error) {
+        if (error instanceof Error && 'issues' in error) {
+            return res.status(400).json({
+                message: 'Validation error',
+                details: error.issues
+            })
+        }
+
+        return res.status(500).json({message: 'Internal server error'})
+    }
+}
+
+export const handleDeleteTopic = async (req: Request, res: Response) => {
+    try {
+        const id = Number(req.query['id'])
+        // validate request body using zod
+        const validateData = deleteTopicSchema.parse({id})
+
+        // call service to delete a topic
+        const topic = await deleteTopic(validateData)
+
+        return res.status(201).json({
+            message: 'Topic deleted successfully',
+            data: topic
+        })
     } catch (error) {
         if (error instanceof Error && 'issues' in error) {
             return res.status(400).json({
