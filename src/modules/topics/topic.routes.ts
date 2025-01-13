@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { handleCreateTopic, handleGetAllTopicsByOwner } from './topic.controller'
+import { handleCreateTopic, handleGetAllTopicsByOwner, handleGetAllTopicsByUser } from './topic.controller'
 
 const router = Router()
 
@@ -7,5 +7,7 @@ const router = Router()
 router.post('/', handleCreateTopic)
 // @ts-ignore
 router.get('/getAllByOwner', handleGetAllTopicsByOwner)
+// @ts-ignore
+router.get('/getAllByUser', handleGetAllTopicsByUser)
 
 export default router

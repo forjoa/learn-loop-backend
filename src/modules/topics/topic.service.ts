@@ -1,5 +1,5 @@
 import prisma from '../../config/db'
-import { CreateTopicInput, GetAllTopicsByOwner } from './topic.model'
+import { CreateTopicInput, GetAllTopicsByOwner, GetAllTopicsByUser } from './topic.model'
 
 export const createTopic = async (topic: CreateTopicInput) => {
     return prisma.topic.create({data: topic})
@@ -9,6 +9,37 @@ export const getAllTopicsByOwner = async (topic: GetAllTopicsByOwner) => {
     return prisma.topic.findMany({
         where: {
             ownerId: topic.ownerId
+        }
+    })
+}
+
+export const getAllTopicsByUser = async (topic: GetAllTopicsByUser) => {
+    return prisma.topic.findMany({
+        where: {
+            users: {
+                some: {
+                    userId: topic.userId,
+                    status: 'APPROVED'
+                }
+            }
+        },
+        include: {
+            users: {
+                where: {
+                    userId: topic.userId,
+                    status: 'APPROVED'
+                },
+                select: {
+                    status: true,
+                    userId: true
+                }
+            },
+            owner: {
+                select: {
+                    id: true,
+                    name: true
+                }
+            }
         }
     })
 }

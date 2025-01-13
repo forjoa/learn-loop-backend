@@ -13,3 +13,9 @@ export const getAllTopicsByOwnerSchema = z.object({
 })
 
 export type GetAllTopicsByOwner = z.infer<typeof getAllTopicsByOwnerSchema>
+
+export const getAllTopicsByUserSchema = z.object({
+    userId: z.number()
+})
+
+export type GetAllTopicsByUser = z.infer<typeof getAllTopicsByUserSchema>
