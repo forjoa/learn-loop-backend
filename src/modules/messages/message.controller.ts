@@ -28,8 +28,9 @@ export const handleCreateMessage = async (req: Request, res: Response) => {
 
 export const handleGetMessages = async (req: Request, res: Response) => {
     try {
+        const chatId = Number(req.query['chatId'])
         // validate request body with zod
-        const validateData = getMessagesSchema.parse(req.body)
+        const validateData = getMessagesSchema.parse({ chatId })
 
         // call service to get all conversation messages
         const messages = await getMessages(validateData)
