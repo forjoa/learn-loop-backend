@@ -8,8 +8,8 @@ export const createTopicSchema = z.object({
 
 export type CreateTopicInput = z.infer<typeof createTopicSchema>
 
-export const getAllOwnerTopicsSchema = z.object({
+export const getAllTopicsByOwnerSchema = z.object({
     ownerId: z.number()
 })
 
-export type GetAllOwnerTopicsSchema = z.infer<typeof getAllOwnerTopicsSchema>
+export type GetAllTopicsByOwner = z.infer<typeof getAllTopicsByOwnerSchema>
