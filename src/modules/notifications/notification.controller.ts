@@ -28,8 +28,9 @@ export const handleCreateNotification = async (req: Request, res: Response) => {
 
 export const handleGetNotifications = async (req: Request, res: Response) => {
     try {
+        const userId = Number(req.query['userId'])
         // validate request body with zod
-        const validateData = getNotificationsSchema.parse(req.body)
+        const validateData = getNotificationsSchema.parse({userId})
 
         // call service to get a notification
         const notifications = await getNofitications(validateData)
