@@ -13,3 +13,9 @@ export const getNotificationsSchema = z.object({
 })
 
 export type GetNotificationsSchema = z.infer<typeof getNotificationsSchema>
+
+export const deleteNotificationSchema = z.object({
+    id: z.number()
+})
+
+export type DeleteNotificationSchema = z.infer<typeof deleteNotificationSchema>
