@@ -7,3 +7,9 @@ export const createNotificationSchema = z.object({
 })
 
 export type CreateNotificationSchema = z.infer<typeof createNotificationSchema>
+
+export const getNotificationsSchema = z.object({
+    userId: z.number()
+})
+
+export type GetNotificationsSchema = z.infer<typeof getNotificationsSchema>
