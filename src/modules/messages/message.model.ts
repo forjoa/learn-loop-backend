@@ -7,3 +7,7 @@ export const createMessageSchema = z.object({
 })
 
 export type CreateMessageSchema = z.infer<typeof createMessageSchema>
+
+export const getMessagesSchema = z.object({chatId: z.number()})
+
+export type GetMessagesSchema = z.infer<typeof getMessagesSchema>
