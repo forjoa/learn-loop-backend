@@ -178,14 +178,23 @@ Asegúrate de tener instalado:
   ```
 
 #### Obtener mensajes
-- **Ruta:** `GET /messages/get`
+- **Ruta:** `GET /messages/get?chatId=number`
+  
+### Notificaciones
+
+#### Obtener notificaciones
+- **Ruta:** `GET /notification/get?userId=number`
+
+#### Crear notificación
+- **Ruta:** `POST /notification/create`
 - **Body:**
   ```json
   {
-    "chatId": "number"
+    "userId": "number",
+    "title": "string",
+    "content": "string"
   }
   ```
-
 
 ## Notas adicionales
 
