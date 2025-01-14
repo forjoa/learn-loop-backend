@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { handleCreateChatMember, handleDeleteChatMember } from './chatMember.controller'
+import { handleCreateChatMember, handleDeleteChatMember, handleGetAllMembers } from './chatMember.controller'
 
 const router = Router()
 
@@ -7,5 +7,7 @@ const router = Router()
 router.post('/create', handleCreateChatMember)
 // @ts-ignore
 router.post('/delete', handleDeleteChatMember)
+// @ts-ignore
+router.get('/getAllMembers', handleGetAllMembers)
 
 export default router

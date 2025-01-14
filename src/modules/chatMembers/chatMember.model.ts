@@ -12,3 +12,9 @@ export const deleteChatMemberSchema = z.object({
 })
 
 export type DeleteChatMemberSchema = z.infer<typeof deleteChatMemberSchema>
+
+export const getAllMembersSchema = z.object({
+    chatId: z.number()
+})
+
+export type GetAllMembers = z.infer<typeof getAllMembersSchema>
