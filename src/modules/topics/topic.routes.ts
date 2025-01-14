@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import {
     handleCreateTopic,
-    handleDeleteTopic,
+    handleDeleteTopic, handleEditTopic,
     handleGetAllTopicsByOwner,
     handleGetAllTopicsByUser
 } from './topic.controller'
@@ -16,5 +16,7 @@ router.get('/getAllByOwner', handleGetAllTopicsByOwner)
 router.get('/getAllByUser', handleGetAllTopicsByUser)
 // @ts-ignore
 router.delete('/delete', handleDeleteTopic)
+// @ts-ignore
+router.put('/edit', handleEditTopic)
 
 export default router

@@ -25,3 +25,12 @@ export const deleteTopicSchema = z.object({
 })
 
 export type DeleteTopic = z.infer<typeof deleteTopicSchema>
+
+export const editTopicSchema = z.object({
+    id: z.number(),
+    title: z.string().min(1, 'Title is required').max(100, 'Title is too long'),
+    description: z.string().min(1, 'Description is required').max(1000, 'Description is too long'),
+    ownerId: z.number()
+})
+
+export type EditTopic = z.infer<typeof editTopicSchema>

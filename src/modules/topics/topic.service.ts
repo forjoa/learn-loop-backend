@@ -1,5 +1,5 @@
 import prisma from '../../config/db'
-import { CreateTopicInput, DeleteTopic, GetAllTopicsByOwner, GetAllTopicsByUser } from './topic.model'
+import { CreateTopicInput, DeleteTopic, EditTopic, GetAllTopicsByOwner, GetAllTopicsByUser } from './topic.model'
 
 export const createTopic = async (topic: CreateTopicInput) => {
     return prisma.topic.create({data: topic})
@@ -49,5 +49,14 @@ export const deleteTopic = async (topic: DeleteTopic) => {
         where: {
             id: topic.id
         }
+    })
+}
+
+export const editTopic = async (topic: EditTopic) => {
+    return prisma.topic.update({
+        where: {
+            id: topic.id
+        },
+        data: topic
     })
 }
