@@ -13,7 +13,9 @@ export const generateToken = (userId: number, role: string) => {
 export const errorHandler = (res: Response, error: any) => {
     if (error instanceof ZodError) {
         res.status(400).json({success: false, message: (error as ZodError).errors[0].message})
+    } else if (error instanceof Error) {
+        res.status(400).json({success: false, message: error.message})
     } else {
-        res.status(400).json({success: false, message: (error as Error).message})
+        res.status(500).json({success: false, message: 'Internal server error'})
     }
 }
