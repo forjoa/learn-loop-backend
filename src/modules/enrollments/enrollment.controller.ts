@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { acceptEnrollmentSchema, createEnrollmentSchema, denyEnrollmentSchema } from './enrollment.model'
 import { acceptEnrollment, createEnrollment, denyEnrollment } from './enrollment.service'
+import { errorHandler } from '../../lib/utils'
 
 export const handleCreateEnrollment = async (req: Request, res: Response) => {
     try {
@@ -15,14 +16,7 @@ export const handleCreateEnrollment = async (req: Request, res: Response) => {
             data: enrollment
         })
     } catch (error) {
-        if (error instanceof Error && 'issues' in error) {
-            return res.status(400).json({
-                message: 'Validation error',
-                details: error.issues
-            })
-        }
-
-        return res.status(500).json({message: 'Internal server error'})
+        errorHandler(res, error)
     }
 }
 
@@ -39,14 +33,7 @@ export const handleAcceptEnrollment = async (req: Request, res: Response) => {
             data: enrollment
         })
     } catch (error) {
-        if (error instanceof Error && 'issues' in error) {
-            return res.status(400).json({
-                message: 'Validation error',
-                details: error.issues
-            })
-        }
-
-        return res.status(500).json({message: 'Internal server error'})
+        errorHandler(res, error)
     }
 }
 
@@ -63,13 +50,6 @@ export const handleDenyEnrollment = async (req: Request, res: Response) => {
             data: enrollment
         })
     } catch (error) {
-        if (error instanceof Error && 'issues' in error) {
-            return res.status(400).json({
-                message: 'Validation error',
-                details: error.issues
-            })
-        }
-
-        return res.status(500).json({message: 'Internal server error'})
+        errorHandler(res, error)
     }
 }

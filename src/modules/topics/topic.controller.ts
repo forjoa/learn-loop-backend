@@ -6,6 +6,7 @@ import {
     getAllTopicsByUserSchema
 } from './topic.model'
 import { createTopic, deleteTopic, editTopic, getAllTopicsByOwner, getAllTopicsByUser } from './topic.service'
+import { errorHandler } from '../../lib/utils'
 
 export const handleCreateTopic = async (req: Request, res: Response) => {
     try {
@@ -20,14 +21,7 @@ export const handleCreateTopic = async (req: Request, res: Response) => {
             data: topic
         })
     } catch (error) {
-        if (error instanceof Error && 'issues' in error) {
-            return res.status(400).json({
-                message: 'Validation error',
-                details: error.issues
-            })
-        }
-
-        return res.status(500).json({message: 'Internal server error'})
+        errorHandler(res, error)
     }
 }
 
@@ -44,14 +38,7 @@ export const handleGetAllTopicsByOwner = async (req: Request, res: Response) => 
             topics
         )
     } catch (error) {
-        if (error instanceof Error && 'issues' in error) {
-            return res.status(400).json({
-                message: 'Validation error',
-                details: error.issues
-            })
-        }
-
-        return res.status(500).json({message: 'Internal server error'})
+        errorHandler(res, error)
     }
 }
 
@@ -68,14 +55,7 @@ export const handleGetAllTopicsByUser = async (req: Request, res: Response) => {
             topics
         )
     } catch (error) {
-        if (error instanceof Error && 'issues' in error) {
-            return res.status(400).json({
-                message: 'Validation error',
-                details: error.issues
-            })
-        }
-
-        return res.status(500).json({message: 'Internal server error'})
+        errorHandler(res, error)
     }
 }
 
@@ -93,14 +73,7 @@ export const handleDeleteTopic = async (req: Request, res: Response) => {
             data: topic
         })
     } catch (error) {
-        if (error instanceof Error && 'issues' in error) {
-            return res.status(400).json({
-                message: 'Validation error',
-                details: error.issues
-            })
-        }
-
-        return res.status(500).json({message: 'Internal server error'})
+        errorHandler(res, error)
     }
 }
 
@@ -117,13 +90,6 @@ export const handleEditTopic = async (req: Request, res: Response) => {
             data: topic
         })
     } catch (error) {
-        if (error instanceof Error && 'issues' in error) {
-            return res.status(400).json({
-                message: 'Validation error',
-                details: error.issues
-            })
-        }
-
-        return res.status(500).json({message: 'Internal server error'})
+        errorHandler(res, error)
     }
 }

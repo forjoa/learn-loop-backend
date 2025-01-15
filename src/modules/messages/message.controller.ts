@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { createMessageSchema, getMessagesSchema } from './message.model'
 import { createMessage, getMessages } from './message.service'
+import { errorHandler } from '../../lib/utils'
 
 export const handleCreateMessage = async (req: Request, res: Response) => {
     try {
@@ -15,14 +16,7 @@ export const handleCreateMessage = async (req: Request, res: Response) => {
             data: message
         })
     } catch (error) {
-        if (error instanceof Error && 'issues' in error) {
-            return res.status(400).json({
-                message: 'Validation error',
-                details: error.issues
-            })
-        }
-
-        return res.status(500).json({message: 'Internal server error'})
+        errorHandler(res, error)
     }
 }
 
@@ -39,13 +33,6 @@ export const handleGetMessages = async (req: Request, res: Response) => {
             messages
         )
     } catch (error) {
-        if (error instanceof Error && 'issues' in error) {
-            return res.status(400).json({
-                message: 'Validation error',
-                details: error.issues
-            })
-        }
-
-        return res.status(500).json({message: 'Internal server error'})
+        errorHandler(res, error)
     }
 }

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { createUserSchema, loginUserSchema } from '../users/user.model'
 import { createUser, loginUser } from './auth.service'
+import { ZodError } from 'zod'
 import { errorHandler } from '../../lib/utils'
 
 export const handleCreateUser = async (req: Request, res: Response) => {
@@ -16,7 +17,14 @@ export const handleCreateUser = async (req: Request, res: Response) => {
             data: user
         })
     } catch (error) {
-        errorHandler(res, error)
+        if (error instanceof Error && 'issues' in error) {
+            return res.status(400).json({
+                message: 'Validation error',
+                details: error.issues
+            })
+        }
+
+        return res.status(500).json({message: 'Internal server error'})
     }
 }
 

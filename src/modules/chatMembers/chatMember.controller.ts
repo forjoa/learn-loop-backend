@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { createChatMemberSchema, deleteChatMemberSchema, getAllMembersSchema } from './chatMember.model'
 import { createChatMember, deleteChatMember, getAllMembers } from './chatMember.service'
+import { errorHandler } from '../../lib/utils'
 
 export const handleCreateChatMember = async (req: Request, res: Response) => {
     try {
@@ -15,14 +16,7 @@ export const handleCreateChatMember = async (req: Request, res: Response) => {
             data: chatMember
         })
     } catch (error) {
-        if (error instanceof Error && 'issues' in error) {
-            return res.status(400).json({
-                message: 'Validation error',
-                details: error.issues
-            })
-        }
-
-        return res.status(500).json({message: 'Internal server error'})
+        errorHandler(res, error)
     }
 }
 
@@ -39,14 +33,7 @@ export const handleDeleteChatMember = async (req: Request, res: Response) => {
             data: chatMember
         })
     } catch (error) {
-        if (error instanceof Error && 'issues' in error) {
-            return res.status(400).json({
-                message: 'Validation error',
-                details: error.issues
-            })
-        }
-
-        return res.status(500).json({message: 'Internal server error'})
+        errorHandler(res, error)
     }
 }
 
@@ -63,13 +50,6 @@ export const handleGetAllMembers = async (req: Request, res: Response) => {
             chatMembers
         )
     } catch (error) {
-        if (error instanceof Error && 'issues' in error) {
-            return res.status(400).json({
-                message: 'Validation error',
-                details: error.issues
-            })
-        }
-
-        return res.status(500).json({message: 'Internal server error'})
+        errorHandler(res, error)
     }
 }

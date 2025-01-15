@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { createNotificationSchema, deleteNotificationSchema, getNotificationsSchema } from './notification.model'
 import { createNotification, deleteNotification, getNofitications } from './notification.service'
+import { errorHandler } from '../../lib/utils'
 
 export const handleCreateNotification = async (req: Request, res: Response) => {
     try {
@@ -15,14 +16,7 @@ export const handleCreateNotification = async (req: Request, res: Response) => {
             data: notification
         })
     } catch (error) {
-        if (error instanceof Error && 'issues' in error) {
-            return res.status(400).json({
-                message: 'Validation error',
-                details: error.issues
-            })
-        }
-
-        return res.status(500).json({message: 'Internal server error'})
+        errorHandler(res, error)
     }
 }
 
@@ -39,14 +33,7 @@ export const handleGetNotifications = async (req: Request, res: Response) => {
             notifications
         )
     } catch (error) {
-        if (error instanceof Error && 'issues' in error) {
-            return res.status(400).json({
-                message: 'Validation error',
-                details: error.issues
-            })
-        }
-
-        return res.status(500).json({message: 'Internal server error'})
+        errorHandler(res, error)
     }
 }
 
@@ -64,13 +51,6 @@ export const handleDeleteNotification = async (req: Request, res: Response) => {
             data: notification
         })
     } catch (error) {
-        if (error instanceof Error && 'issues' in error) {
-            return res.status(400).json({
-                message: 'Validation error',
-                details: error.issues
-            })
-        }
-
-        return res.status(500).json({message: 'Internal server error'})
+        errorHandler(res, error)
     }
 }
