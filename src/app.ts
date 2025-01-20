@@ -14,6 +14,7 @@ import enrollmentRoutes from './modules/enrollments/enrollment.routes'
 import messageRoutes from './modules/messages/message.routes'
 import chatMemberRoutes from './modules/chatMembers/chatMember.routes'
 import notificationRoutes from './modules/notifications/notification.routes'
+import chatRoutes from './modules/chat/chat.routes'
 
 const app = express()
 
@@ -32,6 +33,7 @@ app.use('/enrollments', enrollmentRoutes)
 app.use('/chatMembers', chatMemberRoutes)
 app.use('/messages', messageRoutes)
 app.use('/notifications', notificationRoutes)
+app.use('/chats', chatRoutes)
 
 // socket init
 const httpServer = createServer(app)
