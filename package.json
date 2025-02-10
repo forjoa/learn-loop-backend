@@ -1,7 +1,6 @@
 {
   "name": "learn-loop-backend",
   "version": "1.0.0",
-  "main": "index.js",
   "scripts": {
     "build": "rimraf dist && npx tsc",
     "start": "node dist/server.js",
