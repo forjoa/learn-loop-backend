@@ -6,7 +6,8 @@ Este es un backend desarrollado en Node.js con Express y Prisma. Proporciona fun
 
 Asegúrate de tener instalado:
 - [Node.js](https://nodejs.org/) (v16 o superior)
-- [PostgreSQL](https://www.postgresql.org/)
+- [Docker](https://www.docker.com/) y [Docker Compose](https://docs.docker.com/compose/) (para ejecutar PostgreSQL en contenedor)
+- [PostgreSQL](https://www.postgresql.org/) (opcional si usas Docker)
 - [Prisma CLI](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch-typescript) (opcional, pero recomendado para trabajar con la base de datos)
 
 ## Configuración inicial
@@ -22,20 +23,30 @@ Asegúrate de tener instalado:
    npm install
    ```
 
-3. Configura las variables de entorno:
+3. Inicia la base de datos PostgreSQL con Docker:
+   ```bash
+   docker-compose up -d
+   ```
+   Esto iniciará un contenedor PostgreSQL con las siguientes credenciales:
+   - Usuario: postgres
+   - Contraseña: postgres
+   - Base de datos: learn_loop_db
+   - Puerto: 5432
+
+4. Configura las variables de entorno:
     - Crea un archivo `.env` en la raíz del proyecto.
     - Agrega las siguientes variables:
       ```env
-      DATABASE_URL=postgresql://<usuario>:<contraseña>@<host>:<puerto>/<base_de_datos>
+      DATABASE_URL=postgresql://postgres:postgres@localhost:5432/learn_loop_db
       SIGNATURE=abcd
       ```
 
-4. Genera el cliente de Prisma:
+5. Genera el cliente de Prisma:
    ```bash
    npx prisma generate
    ```
 
-5. Ejecuta las migraciones para crear las tablas en la base de datos:
+6. Ejecuta las migraciones para crear las tablas en la base de datos:
    ```bash
    npx prisma migrate dev
    ```
@@ -179,7 +190,7 @@ Asegúrate de tener instalado:
 
 #### Obtener mensajes
 - **Ruta:** `GET /messages/get?chatId=number`
-  
+
 ### Notificaciones
 
 #### Obtener notificaciones
@@ -201,7 +212,25 @@ Asegúrate de tener instalado:
 - Todos los endpoints (excepto los de autenticación) requieren un token de autenticación válido en el encabezado `Authorization` con el formato: `Bearer <token>`.
 - Asegúrate de que la base de datos esté correctamente configurada antes de iniciar el servidor.
 
+## Uso de Docker
+
+### Iniciar los contenedores
+Para iniciar la base de datos PostgreSQL:
+```bash
+docker-compose up -d
+```
+
+### Detener los contenedores
+Para detener y eliminar los contenedores:
+```bash
+docker-compose down
+```
+
+Para detener y eliminar los contenedores junto con los volúmenes (esto eliminará todos los datos de la base de datos):
+```bash
+docker-compose down -v
+```
+
 ## Licencia
 
 Este proyecto está bajo la Licencia ISC.
-
