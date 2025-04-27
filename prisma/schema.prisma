@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
@@ -14,6 +14,7 @@ model user {
   email     String   @unique @map("email")
   name      String   @map("name")
   password  String   @map("password")
+  photo     String   @default("ant.png") @map("photo")
   role      String   @default("STUDENT") @map("role") // "STUDENT" or "TEACHER"
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -40,20 +41,20 @@ model topic {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  ownerId     Int      @map("owner_id") // El propietario del topic (Teacher)
-  owner       user     @relation(fields: [ownerId], references: [id])
+  ownerId Int  @map("owner_id") // El propietario del topic (Teacher)
+  owner   user @relation(fields: [ownerId], references: [id])
 
-  users       enrollment[]
-  posts       post[]
-  files       file[]
-  chats       chat[]
+  users enrollment[]
+  posts post[]
+  files file[]
+  chats chat[]
 }
 
 // users and topics (enrollments)
 model enrollment {
-  id      Int   @id @default(autoincrement()) @map("id")
-  userId  Int   @map("user_id")
-  topicId Int   @map("topic_id")
+  id      Int @id @default(autoincrement()) @map("id")
+  userId  Int @map("user_id")
+  topicId Int @map("topic_id")
 
   user  user  @relation(fields: [userId], references: [id])
   topic topic @relation(fields: [topicId], references: [id])
@@ -70,11 +71,11 @@ model file {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  userId Int    @map("user_id")
-  user   user   @relation(fields: [userId], references: [id])
+  userId Int  @map("user_id")
+  user   user @relation(fields: [userId], references: [id])
 
-  topicId Int    @map("topic_id")
-  topic   topic  @relation(fields: [topicId], references: [id])
+  topicId Int   @map("topic_id")
+  topic   topic @relation(fields: [topicId], references: [id])
 }
 
 // posts
@@ -85,11 +86,11 @@ model post {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  userId   Int    @map("user_id")
-  user     user   @relation(fields: [userId], references: [id])
+  userId Int  @map("user_id")
+  user   user @relation(fields: [userId], references: [id])
 
-  topicId  Int    @map("topic_id")
-  topic    topic  @relation(fields: [topicId], references: [id])
+  topicId Int   @map("topic_id")
+  topic   topic @relation(fields: [topicId], references: [id])
 }
 
 // notifications
@@ -106,13 +107,13 @@ model notification {
 
 // chats
 model chat {
-  id        Int           @id @default(autoincrement()) @map("id")
-  topicId   Int           @map("topic_id")
-  createdAt DateTime      @default(now()) @map("created_at")
+  id        Int      @id @default(autoincrement()) @map("id")
+  topicId   Int      @map("topic_id")
+  createdAt DateTime @default(now()) @map("created_at")
 
-  topic     topic         @relation(fields: [topicId], references: [id])
-  messages  message[]
-  members   chat_member[] // Relación con chat_member
+  topic    topic         @relation(fields: [topicId], references: [id])
+  messages message[]
+  members  chat_member[] // Relación con chat_member
 }
 
 model chat_member {
@@ -129,15 +130,15 @@ model chat_member {
 
 // messages
 model message {
-  id         Int      @id @default(autoincrement()) @map("id")
-  content    String   @map("content")
-  senderId   Int      @map("sender_id")
-  createdAt  DateTime @default(now()) @map("created_at")
+  id        Int      @id @default(autoincrement()) @map("id")
+  content   String   @map("content")
+  senderId  Int      @map("sender_id")
+  createdAt DateTime @default(now()) @map("created_at")
 
-  sender   user   @relation("SentMessages", fields: [senderId], references: [id])
+  sender user @relation("SentMessages", fields: [senderId], references: [id])
 
-  chatId   Int?   @map("chat_id")
-  chat     chat?  @relation(fields: [chatId], references: [id])
+  chatId Int?  @map("chat_id")
+  chat   chat? @relation(fields: [chatId], references: [id])
 
   user user[]
 }
