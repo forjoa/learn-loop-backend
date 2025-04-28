@@ -94,6 +94,34 @@ Asegúrate de tener instalado:
   }
   ```
 
+#### Validar token y obtener información del usuario
+- **Ruta:** `GET /auth/me/:token`
+- **Parámetros:**
+  - `token`: JWT token del usuario
+- **Respuesta exitosa:**
+  ```json
+  {
+    "success": true,
+    "data": {
+      "exists": true,
+      "user": {
+        "id": "number",
+        "email": "string",
+        "name": "string",
+        "photo": "string",
+        "role": "TEACHER" | "STUDENT"
+      }
+    }
+  }
+  ```
+- **Respuesta de error:**
+  ```json
+  {
+    "success": false,
+    "message": "Invalid or expired token"
+  }
+  ```
+
 ### Usuarios
 
 #### Editar usuario

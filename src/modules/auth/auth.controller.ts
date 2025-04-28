@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { createUserSchema, loginUserSchema } from '../users/user.model'
-import { createUser, loginUser } from './auth.service'
+import { createUser, loginUser, validateToken } from './auth.service'
 import { errorHandler } from '../../lib/utils'
 
 export const handleCreateUser = async (req: Request, res: Response) => {
@@ -29,6 +29,37 @@ export const handleLogin = async (req: Request, res: Response) => {
         const user = await loginUser(input)
 
         res.status(200).json(user)
+    } catch (error) {
+        errorHandler(res, error)
+    }
+}
+
+export const handleValidateToken = async (req: Request, res: Response) => {
+    try {
+        // get token from request parameters
+        const { token } = req.params
+
+        if (!token) {
+            return res.status(400).json({
+                success: false,
+                message: 'Token is required'
+            })
+        }
+
+        // validate token and get user info
+        const result = await validateToken(token)
+
+        if (result.exists) {
+            return res.status(200).json({
+                success: true,
+                data: result
+            })
+        } else {
+            return res.status(401).json({
+                success: false,
+                message: result.error
+            })
+        }
     } catch (error) {
         errorHandler(res, error)
     }

@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { handleCreateUser, handleLogin } from './auth.controller'
+import { handleCreateUser, handleLogin, handleValidateToken } from './auth.controller'
 
 const router = Router()
 
@@ -7,5 +7,7 @@ const router = Router()
 // @ts-ignore
 router.post('/register', handleCreateUser)
 router.post('/login', handleLogin)
+// @ts-ignore
+router.get('/me/:token', handleValidateToken)
 
 export default router
