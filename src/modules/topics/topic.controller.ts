@@ -5,7 +5,14 @@ import {
     getAllTopicsByOwnerSchema,
     getAllTopicsByUserSchema
 } from './topic.model'
-import { createTopic, deleteTopic, editTopic, getAllTopicsByOwner, getAllTopicsByUser } from './topic.service'
+import {
+    createTopic,
+    deleteTopic,
+    editTopic,
+    getAllTopics,
+    getAllTopicsByOwner,
+    getAllTopicsByUser
+} from './topic.service'
 import { errorHandler } from '../../lib/utils'
 
 export const handleCreateTopic = async (req: Request, res: Response) => {
@@ -33,6 +40,18 @@ export const handleGetAllTopicsByOwner = async (req: Request, res: Response) => 
 
         // call service to get all topics by owner id
         const topics = await getAllTopicsByOwner(validateData)
+
+        return res.status(201).json(
+            topics
+        )
+    } catch (error) {
+        errorHandler(res, error)
+    }
+}
+
+export const handleGetAllTopics = async (req: Request, res: Response) => {
+    try {
+        const topics = await getAllTopics()
 
         return res.status(201).json(
             topics

@@ -3,13 +3,16 @@ import {
     handleCreateTopic,
     handleDeleteTopic, handleEditTopic,
     handleGetAllTopicsByOwner,
-    handleGetAllTopicsByUser
+    handleGetAllTopicsByUser,
+    handleGetAllTopics
 } from './topic.controller'
 
 const router = Router()
 
 // @ts-ignore
 router.post('/', handleCreateTopic)
+// @ts-ignore
+router.get('/', handleGetAllTopics)
 // @ts-ignore
 router.get('/getAllByOwner', handleGetAllTopicsByOwner)
 // @ts-ignore

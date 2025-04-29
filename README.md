@@ -149,6 +149,12 @@ Asegúrate de tener instalado:
   }
   ```
 
+#### Obtener todos los tópicos por usuario
+- **Ruta:** `GET /topics?userId=number`
+- **Parámetros de consulta:**
+  - `userId`: ID del usuario
+- **Descripción:** Devuelve todos los tópicos donde el usuario es propietario o está inscrito con estado "APPROVED"
+
 ### Inscripciones
 
 #### Crear inscripción
