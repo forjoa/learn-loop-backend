@@ -74,8 +74,8 @@ model file {
   userId Int  @map("user_id")
   user   user @relation(fields: [userId], references: [id])
 
-  topicId Int   @map("topic_id")
-  topic   topic @relation(fields: [topicId], references: [id])
+  postId Int   @map("post_id")
+  post   topic @relation(fields: [postId], references: [id])
 }
 
 // posts
