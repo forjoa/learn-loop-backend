@@ -36,16 +36,24 @@ app.use('/messages', messageRoutes)
 app.use('/notifications', notificationRoutes)
 app.use('/chats', chatRoutes)
 app.post('/loopy', async (req, res) => {
+    const { message } = req.body
     const openai = new OpenAI({
-        baseURL: 'https://api.deepseek.com',
-        apiKey: 'sk-96f1a2b1da424f62b051a3f01ccefe1f',
+        baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
+        apiKey: env.GEMINI_KEY,
     })
-    const completion = await openai.chat.completions.create({
-        messages: [{role: "system", content: "You are a helpful assistant."}],
-        model: "deepseek-chat",
+
+    const response = await openai.chat.completions.create({
+        model: "gemini-2.0-flash",
+        messages: [
+            { role: "system", content: "You are a helpful assistant." },
+            {
+                role: "user",
+                content: message as string,
+            },
+        ],
     });
 
-    res.send(completion.choices[0].message.content)
+    res.send(response.choices[0].message)
 })
 
 // socket init
@@ -58,6 +66,7 @@ const io = new Server(httpServer, {
 })
 
 import socketHandler from './socket'
+import { env } from './config/env'
 
 socketHandler(io)
 
