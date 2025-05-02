@@ -34,3 +34,9 @@ export const editTopicSchema = z.object({
 })
 
 export type EditTopic = z.infer<typeof editTopicSchema>
+
+export const getTopicSchema = z.object({
+    id: z.number()
+})
+
+export type GetTopic = z.infer<typeof getTopicSchema>

@@ -4,7 +4,7 @@ import {
     handleDeleteTopic, handleEditTopic,
     handleGetAllTopicsByOwner,
     handleGetAllTopicsByUser,
-    handleGetAllTopics
+    handleGetAllTopics, handleGetTopicById
 } from './topic.controller'
 
 const router = Router()
@@ -21,5 +21,7 @@ router.get('/getAllByUser', handleGetAllTopicsByUser)
 router.delete('/delete', handleDeleteTopic)
 // @ts-ignore
 router.put('/edit', handleEditTopic)
+// @ts-ignore
+router.get('/topic', handleGetTopicById)
 
 export default router

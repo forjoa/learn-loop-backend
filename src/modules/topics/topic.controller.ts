@@ -3,7 +3,7 @@ import {
     createTopicSchema,
     deleteTopicSchema, editTopicSchema,
     getAllTopicsByOwnerSchema,
-    getAllTopicsByUserSchema
+    getAllTopicsByUserSchema, getTopicSchema
 } from './topic.model'
 import {
     createTopic,
@@ -11,7 +11,7 @@ import {
     editTopic,
     getAllTopics,
     getAllTopicsByOwner,
-    getAllTopicsByUser
+    getAllTopicsByUser, getTopicById
 } from './topic.service'
 import { errorHandler } from '../../lib/utils'
 
@@ -108,6 +108,21 @@ export const handleEditTopic = async (req: Request, res: Response) => {
             message: 'Topic edited successfully',
             data: topic
         })
+    } catch (error) {
+        errorHandler(res, error)
+    }
+}
+
+export const handleGetTopicById = async (req: Request, res: Response) => {
+    try {
+        const id = Number(req.query['id'])
+        const validateData = getTopicSchema.parse({id})
+
+        const topic = await getTopicById(validateData)
+
+        return res.status(201).json(
+            topic
+        )
     } catch (error) {
         errorHandler(res, error)
     }

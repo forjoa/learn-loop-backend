@@ -1,5 +1,12 @@
 import prisma from '../../config/db'
-import { CreateTopicInput, DeleteTopic, EditTopic, GetAllTopicsByOwner, GetAllTopicsByUser } from './topic.model'
+import {
+    CreateTopicInput,
+    DeleteTopic,
+    EditTopic,
+    GetAllTopicsByOwner,
+    GetAllTopicsByUser,
+    GetTopic
+} from './topic.model'
 
 export const createTopic = async (topic: CreateTopicInput) => {
     return prisma.topic.create({data: topic})
@@ -100,4 +107,32 @@ export const editTopic = async (topic: EditTopic) => {
         },
         data: topic
     })
+}
+
+export const getTopicById = async (topic: GetTopic) => {
+    const result = await prisma.topic.findUnique({
+        where: {
+            id: topic.id,
+        },
+        include: {
+            owner: true,
+            users: {
+                where: {
+                    status: 'APPROVED',
+                },
+                include: {
+                    user: true,
+                },
+            },
+            posts: true,
+        },
+    })
+
+    if (!result) return null
+
+    return {
+        ...result,
+        users: result.users.map(enrollment => enrollment.user),
+        posts: result.posts,
+    }
 }
