@@ -1,5 +1,5 @@
 import prisma from '../../config/db'
-import { CreatePost } from './post.model'
+import { CreatePost, GetSinglePost } from './post.model'
 
 export const createPost = async (postData: CreatePost) => {
     const newPost = await prisma.post.create({
@@ -37,4 +37,20 @@ export const createPost = async (postData: CreatePost) => {
     }
 
     return newPost
+}
+
+export const getSinglePost = async (postData: GetSinglePost) => {
+    const files = await prisma.file.findMany({
+        where: {
+            postId: postData.id
+        }
+    })
+
+    const postInfo = await prisma.post.findUnique({
+        where: {
+            id: postData.id
+        }
+    })
+
+    return {...postInfo, files}
 }
