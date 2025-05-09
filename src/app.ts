@@ -17,6 +17,7 @@ import chatMemberRoutes from './modules/chatMembers/chatMember.routes'
 import notificationRoutes from './modules/notifications/notification.routes'
 import chatRoutes from './modules/chat/chat.routes'
 import postRoutes from './modules/posts/post.routes'
+import filesRoutes from './modules/files/files.routes'
 
 const app = express()
 
@@ -37,6 +38,7 @@ app.use('/messages', messageRoutes)
 app.use('/notifications', notificationRoutes)
 app.use('/chats', chatRoutes)
 app.use('/posts', postRoutes)
+app.use('/files', filesRoutes)
 app.post('/loopy', async (req, res) => {
     const { message } = req.body
     const openai = new OpenAI({
