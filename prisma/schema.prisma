@@ -22,7 +22,6 @@ model user {
   enrollments enrollment[]
   posts       post[]
   messages    message[]
-  files       file[]
 
   sent_messages message[] @relation("SentMessages")
 
@@ -70,9 +69,6 @@ model file {
   fileType  String   @map("file_type")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-
-  userId Int  @map("user_id")
-  user   user @relation(fields: [userId], references: [id])
 
   postId Int   @map("post_id")
   post   topic @relation(fields: [postId], references: [id])
