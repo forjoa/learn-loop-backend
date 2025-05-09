@@ -2,9 +2,30 @@ import prisma from '../../config/db'
 import { CreatePost, GetSinglePost } from './post.model'
 
 export const createPost = async (postData: CreatePost) => {
+
+    console.log(postData)
     const newPost = await prisma.post.create({
-        data: postData,
+        data: {
+            title: postData.title,
+            content: postData.content,
+            topicId: postData.topicId,
+            userId: postData.userId,
+        },
     })
+
+
+    if (postData.fileUrl) {
+        const file = await prisma.file.create({
+            data: {
+                filename: postData.filename,
+                fileType: postData.fileType,
+                url: postData.fileUrl,
+                postId: newPost.id,
+            },
+        })
+
+        console.log(file)
+    }
 
     const topic = await prisma.topic.findUnique({
         where: {id: postData.topicId},
@@ -40,7 +61,7 @@ export const createPost = async (postData: CreatePost) => {
 }
 
 export const getSinglePost = async (postData: GetSinglePost) => {
-    const files = await prisma.file.findMany({
+    const file = await prisma.file.findFirst({
         where: {
             postId: postData.id
         }
@@ -52,5 +73,5 @@ export const getSinglePost = async (postData: GetSinglePost) => {
         }
     })
 
-    return {...postInfo, files}
+    return {...postInfo, file}
 }
