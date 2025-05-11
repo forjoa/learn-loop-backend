@@ -22,7 +22,7 @@ export const handleCreateMessage = async (req: Request, res: Response) => {
 
 export const handleGetMessages = async (req: Request, res: Response) => {
     try {
-        const chatId = Number(req.query['chatId'])
+        const chatId = req.query['chatId']
         // validate request body with zod
         const validateData = getMessagesSchema.parse({chatId})
 

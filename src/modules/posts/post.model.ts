@@ -3,8 +3,8 @@ import { z } from 'zod'
 export const createPostSchema = z.object({
     title: z.string().min(1, 'Title is required').max(100, 'Title is too long'),
     content: z.string().min(1, 'Content is required'),
-    userId: z.number(),
-    topicId: z.number(),
+    userId: z.string(),
+    topicId: z.string(),
     fileUrl: z.string(),
     filename: z.string(),
     fileType: z.string(),
@@ -13,7 +13,7 @@ export const createPostSchema = z.object({
 export type CreatePost = z.infer<typeof createPostSchema>
 
 export const getSinglePostSchema = z.object({
-    id: z.number()
+    id: z.string()
 })
 
 export type GetSinglePost = z.infer<typeof getSinglePostSchema>

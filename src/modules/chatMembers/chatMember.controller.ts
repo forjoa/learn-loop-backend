@@ -39,7 +39,7 @@ export const handleDeleteChatMember = async (req: Request, res: Response) => {
 
 export const handleGetAllMembers = async (req: Request, res: Response) => {
     try {
-        const chatId = Number(req.query['chatId'])
+        const chatId = req.query['chatId']
         // validate request body using zod
         const validateData = getAllMembersSchema.parse({chatId})
 

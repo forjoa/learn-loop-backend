@@ -34,7 +34,7 @@ export const handleCreateTopic = async (req: Request, res: Response) => {
 
 export const handleGetAllTopicsByOwner = async (req: Request, res: Response) => {
     try {
-        const ownerId = Number(req.query['ownerId'])
+        const ownerId = req.query['ownerId']
         // validate request body using zod
         const validateData = getAllTopicsByOwnerSchema.parse({ownerId})
 
@@ -63,7 +63,7 @@ export const handleGetAllTopics = async (req: Request, res: Response) => {
 
 export const handleGetAllTopicsByUser = async (req: Request, res: Response) => {
     try {
-        const userId = Number(req.query['userId'])
+        const userId = req.query['userId']
         // validate request body using zod
         const validateData = getAllTopicsByUserSchema.parse({userId})
 
@@ -80,7 +80,7 @@ export const handleGetAllTopicsByUser = async (req: Request, res: Response) => {
 
 export const handleDeleteTopic = async (req: Request, res: Response) => {
     try {
-        const id = Number(req.query['id'])
+        const id = req.query['id']
         // validate request body using zod
         const validateData = deleteTopicSchema.parse({id})
 
@@ -115,7 +115,7 @@ export const handleEditTopic = async (req: Request, res: Response) => {
 
 export const handleGetTopicById = async (req: Request, res: Response) => {
     try {
-        const id = Number(req.query['id'])
+        const id = req.query['id']
         const validateData = getTopicSchema.parse({id})
 
         const topic = await getTopicById(validateData)

@@ -20,14 +20,18 @@ export const createEnrollment = async (enrollment: CreateEnrollmentSchema) => {
         throw new Error('El usuario no existe')
     }
 
+    const newEnrollment = await prisma.enrollment.create({data: enrollment})
+    
     await prisma.notification.create({
         data: {
             userId: topic.ownerId,
             title: 'Nueva solicitud',
             content: `${user.name} ha solicitado unirse a ${topic.title}`,
+            enrollmentId: newEnrollment.id || undefined,
         },
     })
-    return prisma.enrollment.create({data: enrollment})
+
+    return newEnrollment
 }
 
 export const acceptEnrollment = async (enrollment: AcceptEnrollmentSchema) => {

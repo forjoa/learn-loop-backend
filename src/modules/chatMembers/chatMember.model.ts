@@ -1,20 +1,20 @@
 import { z } from 'zod'
 
 export const createChatMemberSchema = z.object({
-    chatId: z.number(),
-    userId: z.number()
+    chatId: z.string(),
+    userId: z.string()
 })
 
 export type CreateChatMemberSchema = z.infer<typeof createChatMemberSchema>
 
 export const deleteChatMemberSchema = z.object({
-    id: z.number()
+    id: z.string()
 })
 
 export type DeleteChatMemberSchema = z.infer<typeof deleteChatMemberSchema>
 
 export const getAllMembersSchema = z.object({
-    chatId: z.number()
+    chatId: z.string()
 })
 
 export type GetAllMembers = z.infer<typeof getAllMembersSchema>

@@ -5,7 +5,7 @@ import { getChats } from './chat.service'
 
 export const handleGetChats = async (req: Request, res: Response) => {
     try {
-        const userId = Number(req.query['userId'])
+        const userId = req.query['userId']
         const validateData = getChatsSchema.parse({ userId })
 
         const chats = await getChats(validateData)

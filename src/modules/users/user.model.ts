@@ -18,7 +18,7 @@ export const loginUserSchema = z.object({
 export type LoginUserInput = z.infer<typeof loginUserSchema>
 
 export const editUserSchema = z.object({
-    id: z.number(),
+    id: z.string(),
     name: z.string().min(1, 'Name is required').max(100, 'Name is too long'),
     email: z.string().email('Invalid email address'),
     photo: z.string().optional(),

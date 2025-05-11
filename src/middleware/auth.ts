@@ -3,7 +3,7 @@ import { env } from '../config/env'
 import jwt from 'jsonwebtoken'
 
 interface AuthenticateRequest extends Request {
-    user?: { userId: number, role: string }
+    user?: { userId: string, role: string }
 }
 
 export const auth = (req: AuthenticateRequest, res: Response, next: NextFunction) => {
@@ -13,7 +13,7 @@ export const auth = (req: AuthenticateRequest, res: Response, next: NextFunction
 
     try {
         const secret = env.SIGNATURE
-        const payload = jwt.verify(token, secret) as { userId: number, role: string }
+        const payload = jwt.verify(token, secret) as { userId: string, role: string }
 
         // save user info in request
         req.user = payload

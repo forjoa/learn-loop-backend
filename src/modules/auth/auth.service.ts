@@ -43,7 +43,7 @@ export const loginUser = async (input: LoginUserInput) => {
 export const validateToken = async (token: string) => {
     try {
         // verify the token
-        const decoded = jwt.verify(token, env.SIGNATURE) as { userId: number; role: string }
+        const decoded = jwt.verify(token, env.SIGNATURE) as { userId: string; role: string }
 
         // find the user by ID
         const user = await prisma.user.findUnique({

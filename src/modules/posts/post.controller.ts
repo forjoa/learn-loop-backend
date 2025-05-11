@@ -20,7 +20,7 @@ export const handleCreatePost = async (req: Request, res: Response) => {
 
 export const handleGetSinglePost = async (req: Request, res: Response) => {
     try {
-        const id = Number(req.query['id'])
+        const id = req.query['id']
         const validateData = getSinglePostSchema.parse({id})
 
         const post = await getSinglePost(validateData)
