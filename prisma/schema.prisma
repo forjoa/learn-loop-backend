@@ -45,7 +45,6 @@ model topic {
 
   users enrollment[]
   posts post[]
-  files file[]
   chats chat[]
 }
 
@@ -70,8 +69,8 @@ model file {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  postId Int   @map("post_id")
-  post   topic @relation(fields: [postId], references: [id])
+  postId Int  @map("post_id")
+  post   post @relation(fields: [postId], references: [id])
 }
 
 // posts
@@ -85,8 +84,9 @@ model post {
   userId Int  @map("user_id")
   user   user @relation(fields: [userId], references: [id])
 
-  topicId Int   @map("topic_id")
-  topic   topic @relation(fields: [topicId], references: [id])
+  topicId Int    @map("topic_id")
+  topic   topic  @relation(fields: [topicId], references: [id])
+  file    file[]
 }
 
 // notifications
