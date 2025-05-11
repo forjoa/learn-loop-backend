@@ -21,7 +21,7 @@ export const createEnrollment = async (enrollment: CreateEnrollmentSchema) => {
     }
 
     const newEnrollment = await prisma.enrollment.create({data: enrollment})
-    
+
     await prisma.notification.create({
         data: {
             userId: topic.ownerId,
@@ -35,9 +35,27 @@ export const createEnrollment = async (enrollment: CreateEnrollmentSchema) => {
 }
 
 export const acceptEnrollment = async (enrollment: AcceptEnrollmentSchema) => {
-    return prisma.enrollment.update({where: {id: enrollment.id}, data: enrollment})
+    const updatedEnrollment = await prisma.enrollment.update({
+        where: {id: enrollment.id},
+        data: enrollment
+    })
+
+    await prisma.notification.deleteMany({
+        where: {enrollmentId: enrollment.id}
+    })
+
+    return updatedEnrollment
 }
 
 export const denyEnrollment = async (enrollment: DenyEnrollmentSchema) => {
-    return prisma.enrollment.update({where: {id: enrollment.id}, data: enrollment})
+    const updatedEnrollment = await prisma.enrollment.update({
+        where: {id: enrollment.id},
+        data: enrollment
+    })
+
+    await prisma.notification.deleteMany({
+        where: {enrollmentId: enrollment.id}
+    })
+
+    return updatedEnrollment
 }
