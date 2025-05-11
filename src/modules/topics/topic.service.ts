@@ -9,7 +9,20 @@ import {
 } from './topic.model'
 
 export const createTopic = async (topic: CreateTopicInput) => {
-    return prisma.topic.create({data: topic})
+    const currentTopic = await prisma.topic.create({data: topic})
+
+    const newChat = await prisma.chat.create({
+        data: {
+            topicId: currentTopic.id
+        }
+    })
+
+    await prisma.chat_member.create({
+        data: {
+            userId: topic.ownerId,
+            chatId: newChat.id
+        }
+    })
 }
 
 export const getAllTopics = async () => {

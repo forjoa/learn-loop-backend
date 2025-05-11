@@ -104,38 +104,38 @@ model notification {
 
 // chats
 model chat {
-  id        String   @id @default(uuid()) @map("id")
+  id        String   @id @default(uuid())
   topicId   String   @map("topic_id")
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime @default(now())
 
   topic    topic         @relation(fields: [topicId], references: [id])
   messages message[]
-  members  chat_member[] // Relación con chat_member
+  members  chat_member[]
 }
 
 model chat_member {
-  id       String   @id @default(uuid()) @map("id")
+  id       String   @id @default(uuid())
   chatId   String   @map("chat_id")
   userId   String   @map("user_id")
-  joinedAt DateTime @default(now()) @map("joined_at")
+  joinedAt DateTime @default(now())
 
   chat chat @relation(fields: [chatId], references: [id])
   user user @relation(fields: [userId], references: [id])
 
-  @@unique([chatId, userId]) // Asegura que un usuario no se repita en el mismo chat
+  @@unique([chatId, userId])
 }
 
 // messages
 model message {
-  id        String   @id @default(uuid()) @map("id")
-  content   String   @map("content")
+  id        String   @id @default(uuid())
+  content   String
   senderId  String   @map("sender_id")
-  createdAt DateTime @default(now()) @map("created_at")
+  createdAt DateTime @default(now())
 
   sender user @relation("SentMessages", fields: [senderId], references: [id])
 
-  chatId String? @map("chat_id")
-  chat   chat?   @relation(fields: [chatId], references: [id])
-
-  user user[]
+  chatId String  @map("chat_id")
+  chat   chat    @relation(fields: [chatId], references: [id])
+  user   user?   @relation(fields: [userId], references: [id])
+  userId String?
 }
