@@ -12,7 +12,7 @@ export const createPost = async (postData: CreatePost) => {
             },
         })
 
-        if (postData.fileUrl) {
+        if (postData.fileUrl && postData.filename && postData.fileType) {
             try {
                 const file = await prisma.file.create({
                     data: {
