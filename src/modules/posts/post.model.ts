@@ -5,9 +5,9 @@ export const createPostSchema = z.object({
     content: z.string().min(1, 'Content is required'),
     userId: z.string(),
     topicId: z.string(),
-    fileUrl: z.string(),
-    filename: z.string(),
-    fileType: z.string(),
+    fileUrl: z.string().nullable().optional(),
+    filename: z.string().nullable().optional(),
+    fileType: z.string().nullable().optional(),
 })
 
 export type CreatePost = z.infer<typeof createPostSchema>
