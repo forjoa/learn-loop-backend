@@ -40,6 +40,19 @@ export const acceptEnrollment = async (enrollment: AcceptEnrollmentSchema) => {
         data: enrollment
     })
 
+    const topicChat = await prisma.chat.findFirst({
+        where: {
+            topicId: updatedEnrollment.topicId,
+        }
+    })
+
+    await prisma.chat_member.create({
+        data: {
+            userId: updatedEnrollment.userId,
+            chatId: topicChat?.id || '',
+        }
+    })
+
     await prisma.notification.deleteMany({
         where: {enrollmentId: enrollment.id}
     })
