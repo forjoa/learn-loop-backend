@@ -39,6 +39,15 @@ export const getMessages = async (chat: GetMessagesSchema) => {
           name: true,
         },
       },
+      chat: {
+        select: {
+          topic: {
+            select: {
+              title: true
+            }
+          }
+        }
+      }
     },
     orderBy: { createdAt: 'asc' },
   })
