@@ -12,7 +12,7 @@ export const generateToken = (userId: string, role: string) => {
 
 export const errorHandler = (res: Response, error: any) => {
     if (error instanceof ZodError) {
-        res.status(400).json({success: false, message: (error as ZodError).errors[0].message})
+        res.status(400).json({success: false, message: (error as ZodError).issues[0].message})
     } else if (error instanceof Error) {
         res.status(400).json({success: false, message: error.message})
     } else {
