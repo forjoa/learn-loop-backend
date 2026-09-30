@@ -3,7 +3,7 @@ import { handleGetChats } from './chat.controller.ts'
 
 const router = Router()
 
-// @ts-ignore
+// @ts-expect-error
 router.get('/getAll', handleGetChats)
 
 export default router

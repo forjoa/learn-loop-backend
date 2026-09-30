@@ -1,13 +1,17 @@
 import { Router } from 'express'
-import { handleCreateNotification, handleDeleteNotification, handleGetNotifications } from './notification.controller.ts'
+import {
+    handleCreateNotification,
+    handleDeleteNotification,
+    handleGetNotifications,
+} from './notification.controller.ts'
 
 const router = Router()
 
-// @ts-ignore
+// @ts-expect-error
 router.post('/create', handleCreateNotification)
-// @ts-ignore
+// @ts-expect-error
 router.get('/get', handleGetNotifications)
-// @ts-ignore
+// @ts-expect-error
 router.delete('/delete', handleDeleteNotification)
 
 export default router

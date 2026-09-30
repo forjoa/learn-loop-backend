@@ -1,27 +1,29 @@
 import { Router } from 'express'
 import {
     handleCreateTopic,
-    handleDeleteTopic, handleEditTopic,
+    handleDeleteTopic,
+    handleEditTopic,
+    handleGetAllTopics,
     handleGetAllTopicsByOwner,
     handleGetAllTopicsByUser,
-    handleGetAllTopics, handleGetTopicById
+    handleGetTopicById,
 } from './topic.controller.ts'
 
 const router = Router()
 
-// @ts-ignore
+// @ts-expect-error
 router.post('/', handleCreateTopic)
-// @ts-ignore
+// @ts-expect-error
 router.get('/', handleGetAllTopics)
-// @ts-ignore
+// @ts-expect-error
 router.get('/getAllByOwner', handleGetAllTopicsByOwner)
-// @ts-ignore
+// @ts-expect-error
 router.get('/getAllByUser', handleGetAllTopicsByUser)
-// @ts-ignore
+// @ts-expect-error
 router.delete('/delete', handleDeleteTopic)
-// @ts-ignore
+// @ts-expect-error
 router.put('/edit', handleEditTopic)
-// @ts-ignore
+// @ts-expect-error
 router.get('/topic', handleGetTopicById)
 
 export default router

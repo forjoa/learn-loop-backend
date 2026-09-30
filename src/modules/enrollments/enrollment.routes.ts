@@ -3,11 +3,11 @@ import { handleAcceptEnrollment, handleCreateEnrollment, handleDenyEnrollment } 
 
 const router = Router()
 
-// @ts-ignore
+// @ts-expect-error
 router.post('/create', handleCreateEnrollment)
-// @ts-ignore
+// @ts-expect-error
 router.post('/accept', handleAcceptEnrollment)
-// @ts-ignore
+// @ts-expect-error
 router.post('/deny', handleDenyEnrollment)
 
 export default router

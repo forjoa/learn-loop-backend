@@ -1,20 +1,27 @@
 import prisma from '../../config/db.ts'
-import { type CreateTopicInput, type DeleteTopic, type EditTopic, type GetAllTopicsByOwner, type GetAllTopicsByUser, type GetTopic } from './topic.model.ts'
+import type {
+    CreateTopicInput,
+    DeleteTopic,
+    EditTopic,
+    GetAllTopicsByOwner,
+    GetAllTopicsByUser,
+    GetTopic,
+} from './topic.model.ts'
 
 export const createTopic = async (topic: CreateTopicInput) => {
-    const currentTopic = await prisma.topic.create({data: topic})
+    const currentTopic = await prisma.topic.create({ data: topic })
 
     const newChat = await prisma.chat.create({
         data: {
-            topicId: currentTopic.id
-        }
+            topicId: currentTopic.id,
+        },
     })
 
     await prisma.chat_member.create({
         data: {
             userId: topic.ownerId,
-            chatId: newChat.id
-        }
+            chatId: newChat.id,
+        },
     })
 
     return currentTopic
@@ -27,8 +34,8 @@ export const getAllTopics = async () => {
 export const getAllTopicsByOwner = async (topic: GetAllTopicsByOwner) => {
     return prisma.topic.findMany({
         where: {
-            ownerId: topic.ownerId
-        }
+            ownerId: topic.ownerId,
+        },
     })
 }
 
@@ -39,52 +46,52 @@ export const getAllTopicsByUser = async (topic: GetAllTopicsByUser) => {
             users: {
                 some: {
                     userId: topic.userId,
-                    status: 'APPROVED'
-                }
-            }
+                    status: 'APPROVED',
+                },
+            },
         },
         include: {
             users: {
                 where: {
                     userId: topic.userId,
-                    status: 'APPROVED'
+                    status: 'APPROVED',
                 },
                 select: {
                     status: true,
-                    userId: true
-                }
+                    userId: true,
+                },
             },
             owner: {
                 select: {
                     id: true,
-                    name: true
-                }
-            }
-        }
+                    name: true,
+                },
+            },
+        },
     })
 
     // Get topics where user is the owner (teacher)
     const ownedTopics = await prisma.topic.findMany({
         where: {
-            ownerId: topic.userId
+            ownerId: topic.userId,
         },
         include: {
             users: {
                 where: {
-                    status: 'APPROVED'
+                    status: 'APPROVED',
                 },
                 select: {
                     status: true,
-                    userId: true
-                }
+                    userId: true,
+                },
             },
             owner: {
                 select: {
                     id: true,
-                    name: true
-                }
-            }
-        }
+                    name: true,
+                },
+            },
+        },
     })
 
     // Combine both sets of topics, ensuring no duplicates
@@ -92,7 +99,7 @@ export const getAllTopicsByUser = async (topic: GetAllTopicsByUser) => {
 
     // Add owned topics that aren't already in the enrolled topics
     for (const ownedTopic of ownedTopics) {
-        if (!allTopics.some(topic => topic.id === ownedTopic.id)) {
+        if (!allTopics.some((topic) => topic.id === ownedTopic.id)) {
             allTopics.push(ownedTopic)
         }
     }
@@ -103,17 +110,17 @@ export const getAllTopicsByUser = async (topic: GetAllTopicsByUser) => {
 export const deleteTopic = async (topic: DeleteTopic) => {
     return prisma.topic.delete({
         where: {
-            id: topic.id
-        }
+            id: topic.id,
+        },
     })
 }
 
 export const editTopic = async (topic: EditTopic) => {
     return prisma.topic.update({
         where: {
-            id: topic.id
+            id: topic.id,
         },
-        data: topic
+        data: topic,
     })
 }
 
@@ -140,7 +147,7 @@ export const getTopicById = async (topic: GetTopic) => {
 
     return {
         ...result,
-        users: result.users.map(enrollment => enrollment.user),
+        users: result.users.map((enrollment) => enrollment.user),
         posts: result.posts,
     }
 }

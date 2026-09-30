@@ -5,7 +5,7 @@ export const createUserSchema = z.object({
     email: z.string().email('Invalid email address'),
     password: z.string().min(6, 'Password must be at least 6 characters long'),
     photo: z.string().default(''),
-    role: z.enum([ 'TEACHER', 'STUDENT' ]).default('STUDENT')
+    role: z.enum(['TEACHER', 'STUDENT']).default('STUDENT'),
 })
 
 export type CreateUserInput = z.infer<typeof createUserSchema>
@@ -22,7 +22,7 @@ export const editUserSchema = z.object({
     name: z.string().min(1, 'Name is required').max(100, 'Name is too long'),
     email: z.string().email('Invalid email address'),
     photo: z.string().optional(),
-    role: z.enum([ 'TEACHER', 'STUDENT' ])
+    role: z.enum(['TEACHER', 'STUDENT']),
 })
 
 export type EditUserInput = z.infer<typeof editUserSchema>

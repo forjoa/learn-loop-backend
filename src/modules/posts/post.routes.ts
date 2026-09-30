@@ -3,9 +3,9 @@ import { handleCreatePost, handleGetSinglePost } from './post.controller.ts'
 
 const router = Router()
 
-// @ts-ignore
+// @ts-expect-error
 router.post('/', handleCreatePost)
-// @ts-ignore
+// @ts-expect-error
 router.get('/', handleGetSinglePost)
 
 export default router

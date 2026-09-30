@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
+import { errorHandler } from '../../lib/utils.ts'
 import { createPostSchema, getSinglePostSchema } from './post.model.ts'
 import { createPost, getSinglePost } from './post.service.ts'
-import { errorHandler } from '../../lib/utils.ts'
 
 export const handleCreatePost = async (req: Request, res: Response) => {
     try {
@@ -11,7 +11,7 @@ export const handleCreatePost = async (req: Request, res: Response) => {
 
         return res.status(201).json({
             message: 'Post created successfully',
-            data: post
+            data: post,
         })
     } catch (error) {
         errorHandler(res, error)
@@ -20,8 +20,8 @@ export const handleCreatePost = async (req: Request, res: Response) => {
 
 export const handleGetSinglePost = async (req: Request, res: Response) => {
     try {
-        const id = req.query['id']
-        const validateData = getSinglePostSchema.parse({id})
+        const id = req.query.id
+        const validateData = getSinglePostSchema.parse({ id })
 
         const post = await getSinglePost(validateData)
 

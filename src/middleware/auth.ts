@@ -1,25 +1,25 @@
 import type { NextFunction, Request, Response } from 'express'
-import { env } from '../config/env.ts'
 import jwt from 'jsonwebtoken'
+import { env } from '../config/env.ts'
 
 interface AuthenticateRequest extends Request {
-    user?: { userId: string, role: string }
+    user?: { userId: string; role: string }
 }
 
 export const auth = (req: AuthenticateRequest, res: Response, next: NextFunction) => {
     const token = req.headers.authorization?.split(' ')[1]
 
-    if (!token) return res.status(401).json({message: 'Unauthorized'})
+    if (!token) return res.status(401).json({ message: 'Unauthorized' })
 
     try {
         const secret = env.SIGNATURE
-        const payload = jwt.verify(token, secret) as { userId: string, role: string }
+        const payload = jwt.verify(token, secret) as { userId: string; role: string }
 
         // save user info in request
         req.user = payload
 
         next()
-    } catch (e) {
-        return res.status(401).json({message: 'Unauthorized'})
+    } catch (_e) {
+        return res.status(401).json({ message: 'Unauthorized' })
     }
 }

@@ -3,11 +3,11 @@ import { handleCreateChatMember, handleDeleteChatMember, handleGetAllMembers } f
 
 const router = Router()
 
-// @ts-ignore
+// @ts-expect-error
 router.post('/create', handleCreateChatMember)
-// @ts-ignore
+// @ts-expect-error
 router.post('/delete', handleDeleteChatMember)
-// @ts-ignore
+// @ts-expect-error
 router.get('/getAllMembers', handleGetAllMembers)
 
 export default router

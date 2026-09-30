@@ -1,9 +1,12 @@
 import type { Request, Response } from 'express'
+import { errorHandler } from '../../lib/utils.ts'
 import {
     createTopicSchema,
-    deleteTopicSchema, editTopicSchema,
+    deleteTopicSchema,
+    editTopicSchema,
     getAllTopicsByOwnerSchema,
-    getAllTopicsByUserSchema, getTopicSchema
+    getAllTopicsByUserSchema,
+    getTopicSchema,
 } from './topic.model.ts'
 import {
     createTopic,
@@ -11,9 +14,9 @@ import {
     editTopic,
     getAllTopics,
     getAllTopicsByOwner,
-    getAllTopicsByUser, getTopicById
+    getAllTopicsByUser,
+    getTopicById,
 } from './topic.service.ts'
-import { errorHandler } from '../../lib/utils.ts'
 
 export const handleCreateTopic = async (req: Request, res: Response) => {
     try {
@@ -25,7 +28,7 @@ export const handleCreateTopic = async (req: Request, res: Response) => {
 
         return res.status(201).json({
             message: 'Topic created successfully',
-            data: topic
+            data: topic,
         })
     } catch (error) {
         errorHandler(res, error)
@@ -34,28 +37,24 @@ export const handleCreateTopic = async (req: Request, res: Response) => {
 
 export const handleGetAllTopicsByOwner = async (req: Request, res: Response) => {
     try {
-        const ownerId = req.query['ownerId']
+        const ownerId = req.query.ownerId
         // validate request body using zod
-        const validateData = getAllTopicsByOwnerSchema.parse({ownerId})
+        const validateData = getAllTopicsByOwnerSchema.parse({ ownerId })
 
         // call service to get all topics by owner id
         const topics = await getAllTopicsByOwner(validateData)
 
-        return res.status(201).json(
-            topics
-        )
+        return res.status(201).json(topics)
     } catch (error) {
         errorHandler(res, error)
     }
 }
 
-export const handleGetAllTopics = async (req: Request, res: Response) => {
+export const handleGetAllTopics = async (_req: Request, res: Response) => {
     try {
         const topics = await getAllTopics()
 
-        return res.status(200).json(
-            topics
-        )
+        return res.status(200).json(topics)
     } catch (error) {
         errorHandler(res, error)
     }
@@ -63,16 +62,14 @@ export const handleGetAllTopics = async (req: Request, res: Response) => {
 
 export const handleGetAllTopicsByUser = async (req: Request, res: Response) => {
     try {
-        const userId = req.query['userId']
+        const userId = req.query.userId
         // validate request body using zod
-        const validateData = getAllTopicsByUserSchema.parse({userId})
+        const validateData = getAllTopicsByUserSchema.parse({ userId })
 
         // call service to get all topics by user
         const topics = await getAllTopicsByUser(validateData)
 
-        return res.status(201).json(
-            topics
-        )
+        return res.status(201).json(topics)
     } catch (error) {
         errorHandler(res, error)
     }
@@ -80,16 +77,16 @@ export const handleGetAllTopicsByUser = async (req: Request, res: Response) => {
 
 export const handleDeleteTopic = async (req: Request, res: Response) => {
     try {
-        const id = req.query['id']
+        const id = req.query.id
         // validate request body using zod
-        const validateData = deleteTopicSchema.parse({id})
+        const validateData = deleteTopicSchema.parse({ id })
 
         // call service to delete a topic
         const topic = await deleteTopic(validateData)
 
         return res.status(201).json({
             message: 'Topic deleted successfully',
-            data: topic
+            data: topic,
         })
     } catch (error) {
         errorHandler(res, error)
@@ -106,7 +103,7 @@ export const handleEditTopic = async (req: Request, res: Response) => {
 
         return res.status(201).json({
             message: 'Topic edited successfully',
-            data: topic
+            data: topic,
         })
     } catch (error) {
         errorHandler(res, error)
@@ -115,14 +112,12 @@ export const handleEditTopic = async (req: Request, res: Response) => {
 
 export const handleGetTopicById = async (req: Request, res: Response) => {
     try {
-        const id = req.query['id']
-        const validateData = getTopicSchema.parse({id})
+        const id = req.query.id
+        const validateData = getTopicSchema.parse({ id })
 
         const topic = await getTopicById(validateData)
 
-        return res.status(201).json(
-            topic
-        )
+        return res.status(201).json(topic)
     } catch (error) {
         errorHandler(res, error)
     }

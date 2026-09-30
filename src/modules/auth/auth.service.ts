@@ -1,9 +1,9 @@
-import prisma from '../../config/db.ts'
-import { type CreateUserInput, type LoginUserInput } from '../users/user.model.ts'
 import bcrypt from 'bcryptjs'
-import { generateToken } from '../../lib/utils.ts'
 import jwt from 'jsonwebtoken'
+import prisma from '../../config/db.ts'
 import { env } from '../../config/env.ts'
+import { generateToken } from '../../lib/utils.ts'
+import type { CreateUserInput, LoginUserInput } from '../users/user.model.ts'
 
 export const createUser = async (user: CreateUserInput) => {
     const hashedPassword = await bcrypt.hash(user.password, 10)
@@ -11,8 +11,8 @@ export const createUser = async (user: CreateUserInput) => {
     return prisma.user.create({
         data: {
             ...user,
-            password: hashedPassword
-        }
+            password: hashedPassword,
+        },
     })
 }
 
@@ -20,8 +20,8 @@ export const loginUser = async (input: LoginUserInput) => {
     // find user by email
     const user = await prisma.user.findUnique({
         where: {
-            email: input.email
-        }
+            email: input.email,
+        },
     })
 
     if (!user) {
@@ -37,7 +37,7 @@ export const loginUser = async (input: LoginUserInput) => {
 
     const token = generateToken(user.id, user.role)
 
-    return {token, user: {id: user.id, email: user.email, name: user.name, photo: user.photo, role: user.role}}
+    return { token, user: { id: user.id, email: user.email, name: user.name, photo: user.photo, role: user.role } }
 }
 
 export const validateToken = async (token: string) => {
@@ -48,8 +48,8 @@ export const validateToken = async (token: string) => {
         // find the user by ID
         const user = await prisma.user.findUnique({
             where: {
-                id: decoded.userId
-            }
+                id: decoded.userId,
+            },
         })
 
         if (!user) {
@@ -64,14 +64,14 @@ export const validateToken = async (token: string) => {
                 email: user.email,
                 name: user.name,
                 photo: user.photo,
-                role: user.role
-            }
+                role: user.role,
+            },
         }
-    } catch (error) {
+    } catch (_error) {
         // if token is invalid or expired
         return {
             exists: false,
-            error: 'Invalid or expired token'
+            error: 'Invalid or expired token',
         }
     }
 }

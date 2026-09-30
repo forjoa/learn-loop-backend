@@ -1,5 +1,5 @@
 import prisma from '../../config/db.ts'
-import { type CreatePost, type GetSinglePost } from './post.model.ts'
+import type { CreatePost, GetSinglePost } from './post.model.ts'
 
 export const createPost = async (postData: CreatePost) => {
     return prisma.$transaction(async (prisma) => {
@@ -30,8 +30,8 @@ export const createPost = async (postData: CreatePost) => {
         }
 
         const topic = await prisma.topic.findUnique({
-            where: {id: postData.topicId},
-            select: {title: true},
+            where: { id: postData.topicId },
+            select: { title: true },
         })
 
         if (!topic) {
@@ -43,10 +43,10 @@ export const createPost = async (postData: CreatePost) => {
                 topicId: postData.topicId,
                 status: 'APPROVED',
             },
-            select: {userId: true},
+            select: { userId: true },
         })
 
-        const notifications = approvedEnrollments.map(({userId}) => ({
+        const notifications = approvedEnrollments.map(({ userId }) => ({
             userId,
             title: 'Nuevo post',
             content: `Se ha creado nuevo post en ${topic.title}`,
@@ -66,15 +66,15 @@ export const createPost = async (postData: CreatePost) => {
 export const getSinglePost = async (postData: GetSinglePost) => {
     const file = await prisma.file.findFirst({
         where: {
-            postId: postData.id
-        }
+            postId: postData.id,
+        },
     })
 
     const postInfo = await prisma.post.findUnique({
         where: {
-            id: postData.id
-        }
+            id: postData.id,
+        },
     })
 
-    return {...postInfo, file}
+    return { ...postInfo, file }
 }

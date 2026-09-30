@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
+import { errorHandler } from '../../lib/utils.ts'
 import { createChatMemberSchema, deleteChatMemberSchema, getAllMembersSchema } from './chatMember.model.ts'
 import { createChatMember, deleteChatMember, getAllMembers } from './chatMember.service.ts'
-import { errorHandler } from '../../lib/utils.ts'
 
 export const handleCreateChatMember = async (req: Request, res: Response) => {
     try {
@@ -13,7 +13,7 @@ export const handleCreateChatMember = async (req: Request, res: Response) => {
 
         return res.status(201).json({
             message: 'Chat member created successfully',
-            data: chatMember
+            data: chatMember,
         })
     } catch (error) {
         errorHandler(res, error)
@@ -30,7 +30,7 @@ export const handleDeleteChatMember = async (req: Request, res: Response) => {
 
         return res.status(200).json({
             message: 'Chat member deleted successfully',
-            data: chatMember
+            data: chatMember,
         })
     } catch (error) {
         errorHandler(res, error)
@@ -39,16 +39,14 @@ export const handleDeleteChatMember = async (req: Request, res: Response) => {
 
 export const handleGetAllMembers = async (req: Request, res: Response) => {
     try {
-        const chatId = req.query['chatId']
+        const chatId = req.query.chatId
         // validate request body using zod
-        const validateData = getAllMembersSchema.parse({chatId})
+        const validateData = getAllMembersSchema.parse({ chatId })
 
         // call service to get all chat members
         const chatMembers = await getAllMembers(validateData)
 
-        return res.status(200).json(
-            chatMembers
-        )
+        return res.status(200).json(chatMembers)
     } catch (error) {
         errorHandler(res, error)
     }

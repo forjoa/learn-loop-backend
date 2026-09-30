@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
-import { auth } from './auth.ts'
 import { generateToken } from '../lib/utils.ts'
+import { auth } from './auth.ts'
 
 const makeRes = () => {
     const res: any = {}

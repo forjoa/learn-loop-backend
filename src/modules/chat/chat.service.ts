@@ -1,5 +1,5 @@
 import prisma from '../../config/db.ts'
-import { type GetChatsSchema } from './chat.model.ts'
+import type { GetChatsSchema } from './chat.model.ts'
 
 export const getChats = async (chat: GetChatsSchema) => {
     const chats = await prisma.chat_member.findMany({
@@ -12,19 +12,19 @@ export const getChats = async (chat: GetChatsSchema) => {
                     topic: { select: { title: true } },
                     members: {
                         where: { userId: { not: chat.userId } },
-                        select: { user: { select: { id: true, name: true } } }
+                        select: { user: { select: { id: true, name: true } } },
                     },
                     messages: {
                         orderBy: { createdAt: 'desc' },
                         take: 1,
                         select: {
                             content: true,
-                            createdAt: true
-                        }
-                    }
-                }
-            }
-        }
+                            createdAt: true,
+                        },
+                    },
+                },
+            },
+        },
     })
 
     return chats.map((chat) => {
@@ -35,10 +35,10 @@ export const getChats = async (chat: GetChatsSchema) => {
             topicName: chat.chat.topic.title,
             members: chat.chat.members.map((member) => ({
                 id: member.user.id,
-                name: member.user.name
+                name: member.user.name,
             })),
             lastMessage: lastMessage ? lastMessage.content : null,
-            lastMessageDate: lastMessage ? lastMessage.createdAt : null
+            lastMessageDate: lastMessage ? lastMessage.createdAt : null,
         }
     })
 }

@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
+import { errorHandler } from '../../lib/utils.ts'
 import { editUserSchema } from './user.model.ts'
 import { editUser } from './user.service.ts'
-import { errorHandler } from '../../lib/utils.ts'
 
 export const handleEditUser = async (req: Request, res: Response) => {
     try {
@@ -13,7 +13,7 @@ export const handleEditUser = async (req: Request, res: Response) => {
 
         return res.status(200).json({
             message: 'User updated successfully',
-            data: user
+            data: user,
         })
     } catch (error) {
         errorHandler(res, error)

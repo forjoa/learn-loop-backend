@@ -1,54 +1,54 @@
-import { type CreateMessageSchema, type GetMessagesSchema } from './message.model.ts'
 import prisma from '../../config/db.ts'
+import type { CreateMessageSchema, GetMessagesSchema } from './message.model.ts'
 
 export const createMessage = async (message: CreateMessageSchema) => {
-  return prisma.message.create({
-    data: {
-      chatId: message.chatId,
-      senderId: message.senderId,
-      content: message.content,
-    },
-    select: {
-      id: true,
-      chatId: true,
-      senderId: true,
-      content: true,
-      createdAt: true,
-      sender: {
-        select: {
-          id: true,
-          name: true,
+    return prisma.message.create({
+        data: {
+            chatId: message.chatId,
+            senderId: message.senderId,
+            content: message.content,
         },
-      },
-    },
-  })
+        select: {
+            id: true,
+            chatId: true,
+            senderId: true,
+            content: true,
+            createdAt: true,
+            sender: {
+                select: {
+                    id: true,
+                    name: true,
+                },
+            },
+        },
+    })
 }
 
 export const getMessages = async (chat: GetMessagesSchema) => {
-  return prisma.message.findMany({
-    where: { chatId: chat.chatId },
-    select: {
-      id: true,
-      chatId: true,
-      senderId: true,
-      content: true,
-      createdAt: true,
-      sender: {
+    return prisma.message.findMany({
+        where: { chatId: chat.chatId },
         select: {
-          id: true,
-          name: true,
+            id: true,
+            chatId: true,
+            senderId: true,
+            content: true,
+            createdAt: true,
+            sender: {
+                select: {
+                    id: true,
+                    name: true,
+                },
+            },
+            chat: {
+                select: {
+                    topic: {
+                        select: {
+                            title: true,
+                        },
+                    },
+                },
+            },
         },
-      },
-      chat: {
-        select: {
-          topic: {
-            select: {
-              title: true
-            }
-          }
-        }
-      }
-    },
-    orderBy: { createdAt: 'asc' },
-  })
+        orderBy: { createdAt: 'asc' },
+    })
 }

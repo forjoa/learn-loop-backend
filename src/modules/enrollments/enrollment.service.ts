@@ -1,10 +1,10 @@
-import { type AcceptEnrollmentSchema, type CreateEnrollmentSchema, type DenyEnrollmentSchema } from './enrollment.model.ts'
 import prisma from '../../config/db.ts'
+import type { AcceptEnrollmentSchema, CreateEnrollmentSchema, DenyEnrollmentSchema } from './enrollment.model.ts'
 
 export const createEnrollment = async (enrollment: CreateEnrollmentSchema) => {
     const topic = await prisma.topic.findUnique({
-        where: {id: enrollment.topicId},
-        select: {ownerId: true, title: true},
+        where: { id: enrollment.topicId },
+        select: { ownerId: true, title: true },
     })
 
     if (!topic) {
@@ -12,15 +12,15 @@ export const createEnrollment = async (enrollment: CreateEnrollmentSchema) => {
     }
 
     const user = await prisma.user.findUnique({
-        where: {id: enrollment.userId},
-        select: {name: true},
+        where: { id: enrollment.userId },
+        select: { name: true },
     })
 
     if (!user) {
         throw new Error('El usuario no existe')
     }
 
-    const newEnrollment = await prisma.enrollment.create({data: enrollment})
+    const newEnrollment = await prisma.enrollment.create({ data: enrollment })
 
     await prisma.notification.create({
         data: {
@@ -36,25 +36,25 @@ export const createEnrollment = async (enrollment: CreateEnrollmentSchema) => {
 
 export const acceptEnrollment = async (enrollment: AcceptEnrollmentSchema) => {
     const updatedEnrollment = await prisma.enrollment.update({
-        where: {id: enrollment.id},
-        data: enrollment
+        where: { id: enrollment.id },
+        data: enrollment,
     })
 
     const topicChat = await prisma.chat.findFirst({
         where: {
             topicId: updatedEnrollment.topicId,
-        }
+        },
     })
 
     await prisma.chat_member.create({
         data: {
             userId: updatedEnrollment.userId,
             chatId: topicChat?.id || '',
-        }
+        },
     })
 
     await prisma.notification.deleteMany({
-        where: {enrollmentId: enrollment.id}
+        where: { enrollmentId: enrollment.id },
     })
 
     return updatedEnrollment
@@ -62,12 +62,12 @@ export const acceptEnrollment = async (enrollment: AcceptEnrollmentSchema) => {
 
 export const denyEnrollment = async (enrollment: DenyEnrollmentSchema) => {
     const updatedEnrollment = await prisma.enrollment.update({
-        where: {id: enrollment.id},
-        data: enrollment
+        where: { id: enrollment.id },
+        data: enrollment,
     })
 
     await prisma.notification.deleteMany({
-        where: {enrollmentId: enrollment.id}
+        where: { enrollmentId: enrollment.id },
     })
 
     return updatedEnrollment

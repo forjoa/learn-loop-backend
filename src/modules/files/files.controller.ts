@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
 import { errorHandler } from '../../lib/utils.ts'
-import { createFile } from './files.service.ts'
 import { createFileSchema } from './files.model.ts'
+import { createFile } from './files.service.ts'
 
 export const handleCreateFile = async (req: Request, res: Response) => {
     try {
@@ -13,7 +13,7 @@ export const handleCreateFile = async (req: Request, res: Response) => {
 
         return res.status(201).json({
             message: 'File created successfully',
-            data: file
+            data: file,
         })
     } catch (error) {
         errorHandler(res, error)

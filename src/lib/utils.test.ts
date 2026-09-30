@@ -1,12 +1,12 @@
-import { describe, expect, it, vi } from 'vitest'
 import jwt from 'jsonwebtoken'
-import { ZodError, z } from 'zod'
-import { generateToken, errorHandler } from './utils.ts'
+import { describe, expect, it, vi } from 'vitest'
+import { type ZodError, z } from 'zod'
+import { errorHandler, generateToken } from './utils.ts'
 
 describe('generateToken', () => {
     it('signs a token containing the userId and role', () => {
         const token = generateToken('user-1', 'TEACHER')
-        const decoded = jwt.decode(token) as { userId: string, role: string }
+        const decoded = jwt.decode(token) as { userId: string; role: string }
 
         expect(decoded.userId).toBe('user-1')
         expect(decoded.role).toBe('TEACHER')

@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
+import { errorHandler } from '../../lib/utils.ts'
 import { createMessageSchema, getMessagesSchema } from './message.model.ts'
 import { createMessage, getMessages } from './message.service.ts'
-import { errorHandler } from '../../lib/utils.ts'
 
 export const handleCreateMessage = async (req: Request, res: Response) => {
     try {
@@ -13,7 +13,7 @@ export const handleCreateMessage = async (req: Request, res: Response) => {
 
         return res.status(200).json({
             message: 'Message created successfully',
-            data: message
+            data: message,
         })
     } catch (error) {
         errorHandler(res, error)
@@ -22,16 +22,14 @@ export const handleCreateMessage = async (req: Request, res: Response) => {
 
 export const handleGetMessages = async (req: Request, res: Response) => {
     try {
-        const chatId = req.query['chatId']
+        const chatId = req.query.chatId
         // validate request body with zod
-        const validateData = getMessagesSchema.parse({chatId})
+        const validateData = getMessagesSchema.parse({ chatId })
 
         // call service to get all conversation messages
         const messages = await getMessages(validateData)
 
-        return res.status(200).json(
-            messages
-        )
+        return res.status(200).json(messages)
     } catch (error) {
         errorHandler(res, error)
     }

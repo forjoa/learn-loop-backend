@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
+import { errorHandler } from '../../lib/utils.ts'
 import { createNotificationSchema, deleteNotificationSchema, getNotificationsSchema } from './notification.model.ts'
 import { createNotification, deleteNotification, getNofitications } from './notification.service.ts'
-import { errorHandler } from '../../lib/utils.ts'
 
 export const handleCreateNotification = async (req: Request, res: Response) => {
     try {
@@ -13,7 +13,7 @@ export const handleCreateNotification = async (req: Request, res: Response) => {
 
         return res.status(200).json({
             message: 'Notification created successfully',
-            data: notification
+            data: notification,
         })
     } catch (error) {
         errorHandler(res, error)
@@ -22,16 +22,14 @@ export const handleCreateNotification = async (req: Request, res: Response) => {
 
 export const handleGetNotifications = async (req: Request, res: Response) => {
     try {
-        const userId = req.query['userId']
+        const userId = req.query.userId
         // validate request body with zod
-        const validateData = getNotificationsSchema.parse({userId})
+        const validateData = getNotificationsSchema.parse({ userId })
 
         // call service to get a notification
         const notifications = await getNofitications(validateData)
 
-        return res.status(200).json(
-            notifications
-        )
+        return res.status(200).json(notifications)
     } catch (error) {
         errorHandler(res, error)
     }
@@ -39,16 +37,16 @@ export const handleGetNotifications = async (req: Request, res: Response) => {
 
 export const handleDeleteNotification = async (req: Request, res: Response) => {
     try {
-        const id = req.query['id']
+        const id = req.query.id
         // validate request body with zod
-        const validateData = deleteNotificationSchema.parse({id})
+        const validateData = deleteNotificationSchema.parse({ id })
 
         // call service to delete a notification
         const notification = await deleteNotification(validateData)
 
         return res.status(200).json({
             message: 'Notification deleted correctly',
-            data: notification
+            data: notification,
         })
     } catch (error) {
         errorHandler(res, error)

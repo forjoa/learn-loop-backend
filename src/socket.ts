@@ -1,7 +1,7 @@
-import { Server, type Socket } from 'socket.io'
+import type { Server, Socket } from 'socket.io'
 
 interface ChatSocketParams {
-    room: string,
+    room: string
     message: string
 }
 
@@ -14,7 +14,7 @@ export default function socketHandler(io: Server) {
             console.log(`user joined room ${room}`)
         })
 
-        socket.on('chatMessage', ({room, message}: ChatSocketParams) => {
+        socket.on('chatMessage', ({ room, message }: ChatSocketParams) => {
             io.to(room).emit('chatMessage', message)
         })
 

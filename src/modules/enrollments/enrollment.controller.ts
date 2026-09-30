@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
+import { errorHandler } from '../../lib/utils.ts'
 import { acceptEnrollmentSchema, createEnrollmentSchema, denyEnrollmentSchema } from './enrollment.model.ts'
 import { acceptEnrollment, createEnrollment, denyEnrollment } from './enrollment.service.ts'
-import { errorHandler } from '../../lib/utils.ts'
 
 export const handleCreateEnrollment = async (req: Request, res: Response) => {
     try {
@@ -13,7 +13,7 @@ export const handleCreateEnrollment = async (req: Request, res: Response) => {
 
         return res.status(200).json({
             message: 'Enrollment created successfully',
-            data: enrollment
+            data: enrollment,
         })
     } catch (error) {
         errorHandler(res, error)
@@ -30,7 +30,7 @@ export const handleAcceptEnrollment = async (req: Request, res: Response) => {
 
         return res.status(200).json({
             message: 'Enrollment accepted successfully',
-            data: enrollment
+            data: enrollment,
         })
     } catch (error) {
         errorHandler(res, error)
@@ -47,7 +47,7 @@ export const handleDenyEnrollment = async (req: Request, res: Response) => {
 
         return res.status(200).json({
             message: 'Enrollment denied successfully',
-            data: enrollment
+            data: enrollment,
         })
     } catch (error) {
         errorHandler(res, error)

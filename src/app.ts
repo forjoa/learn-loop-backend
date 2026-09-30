@@ -1,23 +1,22 @@
-import express from 'express'
-import cors from 'cors'
 import { createServer } from 'node:http'
-import { Server } from 'socket.io'
+import cors from 'cors'
+import express from 'express'
 import OpenAI from 'openai'
+import { Server } from 'socket.io'
 
 // helpers
 import { auth } from './middleware/auth.ts'
-
+import authRoute from './modules/auth/auth.route.ts'
+import chatRoutes from './modules/chat/chat.routes.ts'
+import chatMemberRoutes from './modules/chatMembers/chatMember.routes.ts'
+import enrollmentRoutes from './modules/enrollments/enrollment.routes.ts'
+import filesRoutes from './modules/files/files.routes.ts'
+import messageRoutes from './modules/messages/message.routes.ts'
+import notificationRoutes from './modules/notifications/notification.routes.ts'
+import postRoutes from './modules/posts/post.routes.ts'
+import topicRoutes from './modules/topics/topic.routes.ts'
 // routes
 import userRoutes from './modules/users/user.routes.ts'
-import topicRoutes from './modules/topics/topic.routes.ts'
-import authRoute from './modules/auth/auth.route.ts'
-import enrollmentRoutes from './modules/enrollments/enrollment.routes.ts'
-import messageRoutes from './modules/messages/message.routes.ts'
-import chatMemberRoutes from './modules/chatMembers/chatMember.routes.ts'
-import notificationRoutes from './modules/notifications/notification.routes.ts'
-import chatRoutes from './modules/chat/chat.routes.ts'
-import postRoutes from './modules/posts/post.routes.ts'
-import filesRoutes from './modules/files/files.routes.ts'
 
 const app = express()
 
@@ -27,7 +26,7 @@ app.use(express.json())
 // unprotected routes
 app.use('/auth', authRoute)
 
-// @ts-ignore
+// @ts-expect-error
 app.use(auth)
 
 app.use('/users', userRoutes)
@@ -47,15 +46,15 @@ app.post('/loopy', async (req, res) => {
     })
 
     const response = await openai.chat.completions.create({
-        model: "gemini-2.0-flash",
+        model: 'gemini-2.0-flash',
         messages: [
-            { role: "system", content: "You are a helpful assistant." },
+            { role: 'system', content: 'You are a helpful assistant.' },
             {
-                role: "user",
+                role: 'user',
                 content: message as string,
             },
         ],
-    });
+    })
 
     res.send(response.choices[0].message)
 })
@@ -69,8 +68,8 @@ const io = new Server(httpServer, {
     },
 })
 
-import socketHandler from './socket.ts'
 import { env } from './config/env.ts'
+import socketHandler from './socket.ts'
 
 socketHandler(io)
 

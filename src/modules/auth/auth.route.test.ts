@@ -1,6 +1,6 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import request from 'supertest'
 import bcrypt from 'bcryptjs'
+import request from 'supertest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const { prismaMock } = vi.hoisted(() => ({
     prismaMock: {

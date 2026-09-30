@@ -13,7 +13,7 @@ export const createPostSchema = z.object({
 export type CreatePost = z.infer<typeof createPostSchema>
 
 export const getSinglePostSchema = z.object({
-    id: z.string()
+    id: z.string(),
 })
 
 export type GetSinglePost = z.infer<typeof getSinglePostSchema>

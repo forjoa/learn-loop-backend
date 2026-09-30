@@ -3,9 +3,9 @@ import { handleCreateMessage, handleGetMessages } from './message.controller.ts'
 
 const router = Router()
 
-// @ts-ignore
+// @ts-expect-error
 router.post('/send', handleCreateMessage)
-// @ts-ignore
+// @ts-expect-error
 router.get('/get', handleGetMessages)
 
 export default router

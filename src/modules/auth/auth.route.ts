@@ -4,10 +4,10 @@ import { handleCreateUser, handleLogin, handleValidateToken } from './auth.contr
 const router = Router()
 
 // create user endpoint
-// @ts-ignore
+// @ts-expect-error
 router.post('/register', handleCreateUser)
 router.post('/login', handleLogin)
-// @ts-ignore
+// @ts-expect-error
 router.get('/me/:token', handleValidateToken)
 
 export default router

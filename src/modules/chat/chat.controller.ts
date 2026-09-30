@@ -5,14 +5,12 @@ import { getChats } from './chat.service.ts'
 
 export const handleGetChats = async (req: Request, res: Response) => {
     try {
-        const userId = req.query['userId']
+        const userId = req.query.userId
         const validateData = getChatsSchema.parse({ userId })
 
         const chats = await getChats(validateData)
 
-        return res.status(200).json(
-            chats
-        )
+        return res.status(200).json(chats)
     } catch (error) {
         errorHandler(res, error)
     }

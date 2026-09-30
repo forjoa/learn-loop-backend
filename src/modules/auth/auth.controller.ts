@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express'
+import { errorHandler } from '../../lib/utils.ts'
 import { createUserSchema, loginUserSchema } from '../users/user.model.ts'
 import { createUser, loginUser, validateToken } from './auth.service.ts'
-import { errorHandler } from '../../lib/utils.ts'
 
 export const handleCreateUser = async (req: Request, res: Response) => {
     try {
@@ -13,7 +13,7 @@ export const handleCreateUser = async (req: Request, res: Response) => {
 
         return res.status(201).json({
             message: 'User created successfully',
-            data: user
+            data: user,
         })
     } catch (error) {
         errorHandler(res, error)
@@ -42,7 +42,7 @@ export const handleValidateToken = async (req: Request, res: Response) => {
         if (!token) {
             return res.status(400).json({
                 success: false,
-                message: 'Token is required'
+                message: 'Token is required',
             })
         }
 
@@ -52,12 +52,12 @@ export const handleValidateToken = async (req: Request, res: Response) => {
         if (result.exists) {
             return res.status(200).json({
                 success: true,
-                data: result
+                data: result,
             })
         } else {
             return res.status(401).json({
                 success: false,
-                message: result.error
+                message: result.error,
             })
         }
     } catch (error) {

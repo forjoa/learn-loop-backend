@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import request from 'supertest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { generateToken } from '../../lib/utils.ts'
 
 const { prismaMock } = vi.hoisted(() => ({
@@ -39,7 +39,12 @@ describe('POST /topics (protected route)', () => {
     })
 
     it('creates a topic, its chat and chat membership for a valid request', async () => {
-        prismaMock.topic.create.mockResolvedValue({ id: 'topic-1', title: 'Algebra', description: 'Intro to algebra', ownerId: 'owner-1' })
+        prismaMock.topic.create.mockResolvedValue({
+            id: 'topic-1',
+            title: 'Algebra',
+            description: 'Intro to algebra',
+            ownerId: 'owner-1',
+        })
         prismaMock.chat.create.mockResolvedValue({ id: 'chat-1', topicId: 'topic-1' })
         prismaMock.chat_member.create.mockResolvedValue({ userId: 'owner-1', chatId: 'chat-1' })
 
@@ -79,9 +84,7 @@ describe('GET /topics (protected route)', () => {
     it('returns all topics for an authenticated request', async () => {
         prismaMock.topic.findMany.mockResolvedValue([{ id: 'topic-1', title: 'Algebra' }])
 
-        const response = await request(httpServer)
-            .get('/topics')
-            .set('Authorization', authHeader)
+        const response = await request(httpServer).get('/topics').set('Authorization', authHeader)
 
         expect(response.status).toBe(200)
         expect(response.body).toEqual([{ id: 'topic-1', title: 'Algebra' }])
