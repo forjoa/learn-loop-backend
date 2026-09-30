@@ -29,6 +29,9 @@ jobs:
       - name: Type-check
         run: npm run typecheck
 
+      - name: Run tests
+        run: npm run test
+
       - name: Boot smoke test
         run: |
           npm run start &
