@@ -1,4 +1,4 @@
-import { Server, Socket } from 'socket.io'
+import { Server, type Socket } from 'socket.io'
 
 interface ChatSocketParams {
     room: string,

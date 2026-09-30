@@ -1,7 +1,7 @@
-import { Request, Response } from 'express'
-import { acceptEnrollmentSchema, createEnrollmentSchema, denyEnrollmentSchema } from './enrollment.model'
-import { acceptEnrollment, createEnrollment, denyEnrollment } from './enrollment.service'
-import { errorHandler } from '../../lib/utils'
+import type { Request, Response } from 'express'
+import { acceptEnrollmentSchema, createEnrollmentSchema, denyEnrollmentSchema } from './enrollment.model.ts'
+import { acceptEnrollment, createEnrollment, denyEnrollment } from './enrollment.service.ts'
+import { errorHandler } from '../../lib/utils.ts'
 
 export const handleCreateEnrollment = async (req: Request, res: Response) => {
     try {

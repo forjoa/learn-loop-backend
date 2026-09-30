@@ -1,12 +1,5 @@
-import prisma from '../../config/db'
-import {
-    CreateTopicInput,
-    DeleteTopic,
-    EditTopic,
-    GetAllTopicsByOwner,
-    GetAllTopicsByUser,
-    GetTopic
-} from './topic.model'
+import prisma from '../../config/db.ts'
+import { type CreateTopicInput, type DeleteTopic, type EditTopic, type GetAllTopicsByOwner, type GetAllTopicsByUser, type GetTopic } from './topic.model.ts'
 
 export const createTopic = async (topic: CreateTopicInput) => {
     const currentTopic = await prisma.topic.create({data: topic})

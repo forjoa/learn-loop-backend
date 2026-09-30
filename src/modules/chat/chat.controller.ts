@@ -1,7 +1,7 @@
-import { Request, Response } from 'express'
-import { errorHandler } from '../../lib/utils'
-import { getChatsSchema } from './chat.model'
-import { getChats } from './chat.service'
+import type { Request, Response } from 'express'
+import { errorHandler } from '../../lib/utils.ts'
+import { getChatsSchema } from './chat.model.ts'
+import { getChats } from './chat.service.ts'
 
 export const handleGetChats = async (req: Request, res: Response) => {
     try {

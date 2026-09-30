@@ -1,7 +1,7 @@
-import { Request, Response } from 'express'
-import { createUserSchema, loginUserSchema } from '../users/user.model'
-import { createUser, loginUser, validateToken } from './auth.service'
-import { errorHandler } from '../../lib/utils'
+import type { Request, Response } from 'express'
+import { createUserSchema, loginUserSchema } from '../users/user.model.ts'
+import { createUser, loginUser, validateToken } from './auth.service.ts'
+import { errorHandler } from '../../lib/utils.ts'
 
 export const handleCreateUser = async (req: Request, res: Response) => {
     try {

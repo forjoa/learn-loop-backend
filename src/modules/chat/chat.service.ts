@@ -1,5 +1,5 @@
-import prisma from '../../config/db'
-import { GetChatsSchema } from './chat.model'
+import prisma from '../../config/db.ts'
+import { type GetChatsSchema } from './chat.model.ts'
 
 export const getChats = async (chat: GetChatsSchema) => {
     const chats = await prisma.chat_member.findMany({

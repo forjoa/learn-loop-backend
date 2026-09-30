@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { handleCreateChatMember, handleDeleteChatMember, handleGetAllMembers } from './chatMember.controller'
+import { handleCreateChatMember, handleDeleteChatMember, handleGetAllMembers } from './chatMember.controller.ts'
 
 const router = Router()
 

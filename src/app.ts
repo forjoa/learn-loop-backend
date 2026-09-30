@@ -5,19 +5,19 @@ import { Server } from 'socket.io'
 import OpenAI from 'openai'
 
 // helpers
-import { auth } from './middleware/auth'
+import { auth } from './middleware/auth.ts'
 
 // routes
-import userRoutes from './modules/users/user.routes'
-import topicRoutes from './modules/topics/topic.routes'
-import authRoute from './modules/auth/auth.route'
-import enrollmentRoutes from './modules/enrollments/enrollment.routes'
-import messageRoutes from './modules/messages/message.routes'
-import chatMemberRoutes from './modules/chatMembers/chatMember.routes'
-import notificationRoutes from './modules/notifications/notification.routes'
-import chatRoutes from './modules/chat/chat.routes'
-import postRoutes from './modules/posts/post.routes'
-import filesRoutes from './modules/files/files.routes'
+import userRoutes from './modules/users/user.routes.ts'
+import topicRoutes from './modules/topics/topic.routes.ts'
+import authRoute from './modules/auth/auth.route.ts'
+import enrollmentRoutes from './modules/enrollments/enrollment.routes.ts'
+import messageRoutes from './modules/messages/message.routes.ts'
+import chatMemberRoutes from './modules/chatMembers/chatMember.routes.ts'
+import notificationRoutes from './modules/notifications/notification.routes.ts'
+import chatRoutes from './modules/chat/chat.routes.ts'
+import postRoutes from './modules/posts/post.routes.ts'
+import filesRoutes from './modules/files/files.routes.ts'
 
 const app = express()
 
@@ -69,8 +69,8 @@ const io = new Server(httpServer, {
     },
 })
 
-import socketHandler from './socket'
-import { env } from './config/env'
+import socketHandler from './socket.ts'
+import { env } from './config/env.ts'
 
 socketHandler(io)
 

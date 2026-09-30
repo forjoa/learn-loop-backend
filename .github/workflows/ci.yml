@@ -27,7 +27,20 @@ jobs:
         run: npx prisma generate
 
       - name: Type-check
-        run: npx tsc --noEmit
+        run: npm run typecheck
 
-      - name: Build
-        run: npm run build
+      - name: Boot smoke test
+        run: |
+          npm run start &
+          SERVER_PID=$!
+          for i in $(seq 1 10); do
+            if curl -s -o /dev/null http://localhost:8000/; then
+              echo "Server responded"
+              kill $SERVER_PID
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Server did not respond in time"
+          kill $SERVER_PID
+          exit 1

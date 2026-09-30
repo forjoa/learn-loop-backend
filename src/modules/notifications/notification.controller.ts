@@ -1,7 +1,7 @@
-import { Request, Response } from 'express'
-import { createNotificationSchema, deleteNotificationSchema, getNotificationsSchema } from './notification.model'
-import { createNotification, deleteNotification, getNofitications } from './notification.service'
-import { errorHandler } from '../../lib/utils'
+import type { Request, Response } from 'express'
+import { createNotificationSchema, deleteNotificationSchema, getNotificationsSchema } from './notification.model.ts'
+import { createNotification, deleteNotification, getNofitications } from './notification.service.ts'
+import { errorHandler } from '../../lib/utils.ts'
 
 export const handleCreateNotification = async (req: Request, res: Response) => {
     try {

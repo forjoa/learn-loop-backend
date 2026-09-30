@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { handleAcceptEnrollment, handleCreateEnrollment, handleDenyEnrollment } from './enrollment.controller'
+import { handleAcceptEnrollment, handleCreateEnrollment, handleDenyEnrollment } from './enrollment.controller.ts'
 
 const router = Router()
 

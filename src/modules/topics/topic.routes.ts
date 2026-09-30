@@ -5,7 +5,7 @@ import {
     handleGetAllTopicsByOwner,
     handleGetAllTopicsByUser,
     handleGetAllTopics, handleGetTopicById
-} from './topic.controller'
+} from './topic.controller.ts'
 
 const router = Router()
 

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
-import { Response } from 'express'
+import type { Response } from 'express'
 import { ZodError } from 'zod'
-import { env } from '../config/env'
+import { env } from '../config/env.ts'
 
 export const generateToken = (userId: string, role: string) => {
     const secret = env.SIGNATURE

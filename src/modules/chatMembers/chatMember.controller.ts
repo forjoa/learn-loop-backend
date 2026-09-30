@@ -1,7 +1,7 @@
-import { Request, Response } from 'express'
-import { createChatMemberSchema, deleteChatMemberSchema, getAllMembersSchema } from './chatMember.model'
-import { createChatMember, deleteChatMember, getAllMembers } from './chatMember.service'
-import { errorHandler } from '../../lib/utils'
+import type { Request, Response } from 'express'
+import { createChatMemberSchema, deleteChatMemberSchema, getAllMembersSchema } from './chatMember.model.ts'
+import { createChatMember, deleteChatMember, getAllMembers } from './chatMember.service.ts'
+import { errorHandler } from '../../lib/utils.ts'
 
 export const handleCreateChatMember = async (req: Request, res: Response) => {
     try {

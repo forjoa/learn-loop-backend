@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { handleCreateUser, handleLogin, handleValidateToken } from './auth.controller'
+import { handleCreateUser, handleLogin, handleValidateToken } from './auth.controller.ts'
 
 const router = Router()
 

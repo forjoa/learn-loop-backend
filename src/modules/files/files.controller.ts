@@ -1,7 +1,7 @@
-import { Request, Response } from 'express'
-import { errorHandler } from '../../lib/utils'
-import { createFile } from './files.service'
-import { createFileSchema } from './files.model'
+import type { Request, Response } from 'express'
+import { errorHandler } from '../../lib/utils.ts'
+import { createFile } from './files.service.ts'
+import { createFileSchema } from './files.model.ts'
 
 export const handleCreateFile = async (req: Request, res: Response) => {
     try {

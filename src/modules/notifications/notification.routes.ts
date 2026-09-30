@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { handleCreateNotification, handleDeleteNotification, handleGetNotifications } from './notification.controller'
+import { handleCreateNotification, handleDeleteNotification, handleGetNotifications } from './notification.controller.ts'
 
 const router = Router()
 

@@ -1,5 +1,5 @@
-import { AcceptEnrollmentSchema, CreateEnrollmentSchema, DenyEnrollmentSchema } from './enrollment.model'
-import prisma from '../../config/db'
+import { type AcceptEnrollmentSchema, type CreateEnrollmentSchema, type DenyEnrollmentSchema } from './enrollment.model.ts'
+import prisma from '../../config/db.ts'
 
 export const createEnrollment = async (enrollment: CreateEnrollmentSchema) => {
     const topic = await prisma.topic.findUnique({

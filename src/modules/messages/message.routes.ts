@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { handleCreateMessage, handleGetMessages } from './message.controller'
+import { handleCreateMessage, handleGetMessages } from './message.controller.ts'
 
 const router = Router()
 

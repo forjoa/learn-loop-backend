@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { handleEditUser } from './user.controller'
+import { handleEditUser } from './user.controller.ts'
 
 const router = Router()
 

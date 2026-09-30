@@ -1,5 +1,5 @@
-import prisma from '../../config/db'
-import { CreatePost, GetSinglePost } from './post.model'
+import prisma from '../../config/db.ts'
+import { type CreatePost, type GetSinglePost } from './post.model.ts'
 
 export const createPost = async (postData: CreatePost) => {
     return prisma.$transaction(async (prisma) => {

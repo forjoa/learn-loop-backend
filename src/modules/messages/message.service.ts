@@ -1,5 +1,5 @@
-import { CreateMessageSchema, GetMessagesSchema } from './message.model'
-import prisma from '../../config/db'
+import { type CreateMessageSchema, type GetMessagesSchema } from './message.model.ts'
+import prisma from '../../config/db.ts'
 
 export const createMessage = async (message: CreateMessageSchema) => {
   return prisma.message.create({

@@ -1,5 +1,5 @@
-import { CreateChatMemberSchema, DeleteChatMemberSchema, GetAllMembers } from './chatMember.model'
-import prisma from '../../config/db'
+import { type CreateChatMemberSchema, type DeleteChatMemberSchema, type GetAllMembers } from './chatMember.model.ts'
+import prisma from '../../config/db.ts'
 
 export const createChatMember = async (chatMember: CreateChatMemberSchema) => {
     return prisma.chat_member.create({data: chatMember})

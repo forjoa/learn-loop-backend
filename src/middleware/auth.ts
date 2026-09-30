@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from 'express'
-import { env } from '../config/env'
+import type { NextFunction, Request, Response } from 'express'
+import { env } from '../config/env.ts'
 import jwt from 'jsonwebtoken'
 
 interface AuthenticateRequest extends Request {

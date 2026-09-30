@@ -1,7 +1,7 @@
-import { Request, Response } from 'express'
-import { createPostSchema, getSinglePostSchema } from './post.model'
-import { createPost, getSinglePost } from './post.service'
-import { errorHandler } from '../../lib/utils'
+import type { Request, Response } from 'express'
+import { createPostSchema, getSinglePostSchema } from './post.model.ts'
+import { createPost, getSinglePost } from './post.service.ts'
+import { errorHandler } from '../../lib/utils.ts'
 
 export const handleCreatePost = async (req: Request, res: Response) => {
     try {

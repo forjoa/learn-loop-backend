@@ -1,7 +1,7 @@
-import { Request, Response } from 'express'
-import { createMessageSchema, getMessagesSchema } from './message.model'
-import { createMessage, getMessages } from './message.service'
-import { errorHandler } from '../../lib/utils'
+import type { Request, Response } from 'express'
+import { createMessageSchema, getMessagesSchema } from './message.model.ts'
+import { createMessage, getMessages } from './message.service.ts'
+import { errorHandler } from '../../lib/utils.ts'
 
 export const handleCreateMessage = async (req: Request, res: Response) => {
     try {

@@ -1,10 +1,10 @@
-import { Request, Response } from 'express'
+import type { Request, Response } from 'express'
 import {
     createTopicSchema,
     deleteTopicSchema, editTopicSchema,
     getAllTopicsByOwnerSchema,
     getAllTopicsByUserSchema, getTopicSchema
-} from './topic.model'
+} from './topic.model.ts'
 import {
     createTopic,
     deleteTopic,
@@ -12,8 +12,8 @@ import {
     getAllTopics,
     getAllTopicsByOwner,
     getAllTopicsByUser, getTopicById
-} from './topic.service'
-import { errorHandler } from '../../lib/utils'
+} from './topic.service.ts'
+import { errorHandler } from '../../lib/utils.ts'
 
 export const handleCreateTopic = async (req: Request, res: Response) => {
     try {

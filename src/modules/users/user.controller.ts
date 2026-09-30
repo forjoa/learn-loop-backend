@@ -1,7 +1,7 @@
-import { Request, Response } from 'express'
-import { editUserSchema } from './user.model'
-import { editUser } from './user.service'
-import { errorHandler } from '../../lib/utils'
+import type { Request, Response } from 'express'
+import { editUserSchema } from './user.model.ts'
+import { editUser } from './user.service.ts'
+import { errorHandler } from '../../lib/utils.ts'
 
 export const handleEditUser = async (req: Request, res: Response) => {
     try {
