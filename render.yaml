@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: learn-loop-backend
+    runtime: node
+    plan: free
+    branch: main
+    autoDeploy: true
+    buildCommand: npm install
+    startCommand: npm run deploy
+    envVars:
+      - key: NODE_VERSION
+        value: "24"
+      - key: DATABASE_URL
+        sync: false
+      - key: SIGNATURE
+        sync: false
+      - key: GEMINI_KEY
+        sync: false
