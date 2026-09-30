@@ -16,6 +16,8 @@ export const createTopic = async (topic: CreateTopicInput) => {
             chatId: newChat.id
         }
     })
+
+    return currentTopic
 }
 
 export const getAllTopics = async () => {

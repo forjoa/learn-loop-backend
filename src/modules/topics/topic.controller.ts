@@ -53,7 +53,7 @@ export const handleGetAllTopics = async (req: Request, res: Response) => {
     try {
         const topics = await getAllTopics()
 
-        return res.status(201).json(
+        return res.status(200).json(
             topics
         )
     } catch (error) {
