@@ -21,3 +21,16 @@ export const denyEnrollmentSchema = z.object({
 })
 
 export type DenyEnrollmentSchema = z.infer<typeof denyEnrollmentSchema>
+
+export const getEnrollmentStatusSchema = z.object({
+    userId: z.string(),
+    topicId: z.string(),
+})
+
+export type GetEnrollmentStatusSchema = z.infer<typeof getEnrollmentStatusSchema>
+
+export const getPendingEnrollmentsSchema = z.object({
+    topicId: z.string(),
+})
+
+export type GetPendingEnrollmentsSchema = z.infer<typeof getPendingEnrollmentsSchema>

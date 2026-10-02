@@ -1,7 +1,19 @@
 import type { Request, Response } from 'express'
 import { errorHandler } from '../../lib/utils.ts'
-import { acceptEnrollmentSchema, createEnrollmentSchema, denyEnrollmentSchema } from './enrollment.model.ts'
-import { acceptEnrollment, createEnrollment, denyEnrollment } from './enrollment.service.ts'
+import {
+    acceptEnrollmentSchema,
+    createEnrollmentSchema,
+    denyEnrollmentSchema,
+    getEnrollmentStatusSchema,
+    getPendingEnrollmentsSchema,
+} from './enrollment.model.ts'
+import {
+    acceptEnrollment,
+    createEnrollment,
+    denyEnrollment,
+    getEnrollmentStatus,
+    getPendingEnrollmentsByTopic,
+} from './enrollment.service.ts'
 
 export const handleCreateEnrollment = async (req: Request, res: Response) => {
     try {
@@ -49,6 +61,33 @@ export const handleDenyEnrollment = async (req: Request, res: Response) => {
             message: 'Enrollment denied successfully',
             data: enrollment,
         })
+    } catch (error) {
+        errorHandler(res, error)
+    }
+}
+
+export const handleGetEnrollmentStatus = async (req: Request, res: Response) => {
+    try {
+        const userId = req.query.userId
+        const topicId = req.query.topicId
+        const validateData = getEnrollmentStatusSchema.parse({ userId, topicId })
+
+        const status = await getEnrollmentStatus(validateData)
+
+        return res.status(200).json(status)
+    } catch (error) {
+        errorHandler(res, error)
+    }
+}
+
+export const handleGetPendingEnrollments = async (req: Request, res: Response) => {
+    try {
+        const topicId = req.query.topicId
+        const validateData = getPendingEnrollmentsSchema.parse({ topicId })
+
+        const enrollments = await getPendingEnrollmentsByTopic(validateData)
+
+        return res.status(200).json(enrollments)
     } catch (error) {
         errorHandler(res, error)
     }

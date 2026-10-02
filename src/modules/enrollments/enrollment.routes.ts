@@ -1,5 +1,11 @@
 import { Router } from 'express'
-import { handleAcceptEnrollment, handleCreateEnrollment, handleDenyEnrollment } from './enrollment.controller.ts'
+import {
+    handleAcceptEnrollment,
+    handleCreateEnrollment,
+    handleDenyEnrollment,
+    handleGetEnrollmentStatus,
+    handleGetPendingEnrollments,
+} from './enrollment.controller.ts'
 
 const router = Router()
 
@@ -9,5 +15,9 @@ router.post('/create', handleCreateEnrollment)
 router.post('/accept', handleAcceptEnrollment)
 // @ts-expect-error
 router.post('/deny', handleDenyEnrollment)
+// @ts-expect-error
+router.get('/status', handleGetEnrollmentStatus)
+// @ts-expect-error
+router.get('/pending', handleGetPendingEnrollments)
 
 export default router
