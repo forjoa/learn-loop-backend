@@ -16,6 +16,7 @@ import {
     getAllTopicsByOwner,
     getAllTopicsByUser,
     getTopicById,
+    getTopicPreview,
 } from './topic.service.ts'
 
 export const handleCreateTopic = async (req: Request, res: Response) => {
@@ -118,6 +119,22 @@ export const handleGetTopicById = async (req: Request, res: Response) => {
         const topic = await getTopicById(validateData)
 
         return res.status(201).json(topic)
+    } catch (error) {
+        errorHandler(res, error)
+    }
+}
+
+export const handleGetTopicPreview = async (req: Request, res: Response) => {
+    try {
+        const id = req.query.id
+        const validateData = getTopicSchema.parse({ id })
+
+        const preview = await getTopicPreview(validateData)
+        if (!preview) {
+            return res.status(404).json({ message: 'Tema no encontrado' })
+        }
+
+        return res.status(200).json(preview)
     } catch (error) {
         errorHandler(res, error)
     }

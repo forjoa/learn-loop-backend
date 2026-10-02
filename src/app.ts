@@ -14,6 +14,7 @@ import filesRoutes from './modules/files/files.routes.ts'
 import messageRoutes from './modules/messages/message.routes.ts'
 import notificationRoutes from './modules/notifications/notification.routes.ts'
 import postRoutes from './modules/posts/post.routes.ts'
+import topicPublicRoutes from './modules/topics/topic.public.routes.ts'
 import topicRoutes from './modules/topics/topic.routes.ts'
 // routes
 import userRoutes from './modules/users/user.routes.ts'
@@ -25,6 +26,7 @@ app.use(express.json())
 
 // unprotected routes
 app.use('/auth', authRoute)
+app.use('/public/topics', topicPublicRoutes)
 
 // @ts-expect-error
 app.use(auth)

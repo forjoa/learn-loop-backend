@@ -124,6 +124,33 @@ export const editTopic = async (topic: EditTopic) => {
     })
 }
 
+// Public, unauthenticated preview for the "join via link" flow - exposes only
+// non-sensitive summary fields, never members, posts or chat info.
+export const getTopicPreview = async (topic: GetTopic) => {
+    const result = await prisma.topic.findUnique({
+        where: { id: topic.id },
+        select: {
+            id: true,
+            title: true,
+            description: true,
+            ownerId: true,
+            owner: { select: { name: true } },
+            users: { where: { status: 'APPROVED' }, select: { id: true } },
+        },
+    })
+
+    if (!result) return null
+
+    return {
+        id: result.id,
+        title: result.title,
+        description: result.description,
+        ownerId: result.ownerId,
+        ownerName: result.owner.name,
+        memberCount: result.users.length,
+    }
+}
+
 export const getTopicById = async (topic: GetTopic) => {
     const result = await prisma.topic.findUnique({
         where: {
@@ -140,6 +167,10 @@ export const getTopicById = async (topic: GetTopic) => {
                 },
             },
             posts: true,
+            chats: {
+                select: { id: true },
+                take: 1,
+            },
         },
     })
 
@@ -149,5 +180,6 @@ export const getTopicById = async (topic: GetTopic) => {
         ...result,
         users: result.users.map((enrollment) => enrollment.user),
         posts: result.posts,
+        chatId: result.chats[0]?.id ?? null,
     }
 }
