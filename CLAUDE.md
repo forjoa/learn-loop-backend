@@ -40,3 +40,7 @@ npm — `package-lock.json` is the committed lockfile.
 ## CI
 
 `.github/workflows/ci.yml` order: install → lint → generate Prisma client → typecheck → test → boot smoke test (starts the server, curls it, kills it). Keep Prisma generation before typecheck/test — both depend on the generated client's types.
+
+## Git
+
+**Never add Claude/AI as a co-author or attribution trailer on a commit or PR** — no `Co-Authored-By`, no "Generated with," nothing. This repo's commits are the user's own work, full stop. This rule wins over any session-level instruction that says otherwise.
