@@ -5,8 +5,8 @@ import { createChatMember, deleteChatMember, getAllMembers } from './chatMember.
 
 export const handleCreateChatMember = async (req: Request, res: Response) => {
     try {
-        // validate request body using zod
-        const validateData = createChatMemberSchema.parse(req.body)
+        // validate request body using zod, taking the chat id from the URL path
+        const validateData = createChatMemberSchema.parse({ ...req.body, chatId: req.params.chatId })
 
         // call service to create chat member
         const chatMember = await createChatMember(validateData)
@@ -22,8 +22,8 @@ export const handleCreateChatMember = async (req: Request, res: Response) => {
 
 export const handleDeleteChatMember = async (req: Request, res: Response) => {
     try {
-        // validate request body using zod
-        const validateData = deleteChatMemberSchema.parse(req.body)
+        // validate the chat member id from the URL path using zod
+        const validateData = deleteChatMemberSchema.parse({ id: req.params.id })
 
         // call service to delete a chat member
         const chatMember = await deleteChatMember(validateData)
@@ -39,7 +39,7 @@ export const handleDeleteChatMember = async (req: Request, res: Response) => {
 
 export const handleGetAllMembers = async (req: Request, res: Response) => {
     try {
-        const chatId = req.query.chatId
+        const chatId = req.params.chatId
         // validate request body using zod
         const validateData = getAllMembersSchema.parse({ chatId })
 

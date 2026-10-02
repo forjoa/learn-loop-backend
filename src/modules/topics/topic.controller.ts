@@ -36,23 +36,21 @@ export const handleCreateTopic = async (req: Request, res: Response) => {
     }
 }
 
-export const handleGetAllTopicsByOwner = async (req: Request, res: Response) => {
+export const handleGetAllTopics = async (req: Request, res: Response) => {
     try {
         const ownerId = req.query.ownerId
-        // validate request body using zod
-        const validateData = getAllTopicsByOwnerSchema.parse({ ownerId })
 
-        // call service to get all topics by owner id
-        const topics = await getAllTopicsByOwner(validateData)
+        // optional ?ownerId= filter on the topics collection
+        if (ownerId !== undefined) {
+            // validate the query param using zod
+            const validateData = getAllTopicsByOwnerSchema.parse({ ownerId })
 
-        return res.status(201).json(topics)
-    } catch (error) {
-        errorHandler(res, error)
-    }
-}
+            // call service to get all topics by owner id
+            const ownedTopics = await getAllTopicsByOwner(validateData)
 
-export const handleGetAllTopics = async (_req: Request, res: Response) => {
-    try {
+            return res.status(201).json(ownedTopics)
+        }
+
         const topics = await getAllTopics()
 
         return res.status(200).json(topics)
@@ -63,7 +61,7 @@ export const handleGetAllTopics = async (_req: Request, res: Response) => {
 
 export const handleGetAllTopicsByUser = async (req: Request, res: Response) => {
     try {
-        const userId = req.query.userId
+        const userId = req.params.userId
         // validate request body using zod
         const validateData = getAllTopicsByUserSchema.parse({ userId })
 
@@ -78,7 +76,7 @@ export const handleGetAllTopicsByUser = async (req: Request, res: Response) => {
 
 export const handleDeleteTopic = async (req: Request, res: Response) => {
     try {
-        const id = req.query.id
+        const id = req.params.id
         // validate request body using zod
         const validateData = deleteTopicSchema.parse({ id })
 
@@ -96,8 +94,8 @@ export const handleDeleteTopic = async (req: Request, res: Response) => {
 
 export const handleEditTopic = async (req: Request, res: Response) => {
     try {
-        // validate request body using zod
-        const validateData = editTopicSchema.parse(req.body)
+        // validate request body using zod, taking the id from the URL path
+        const validateData = editTopicSchema.parse({ ...req.body, id: req.params.id })
 
         // call service to edit a topic
         const topic = await editTopic(validateData)
@@ -113,7 +111,7 @@ export const handleEditTopic = async (req: Request, res: Response) => {
 
 export const handleGetTopicById = async (req: Request, res: Response) => {
     try {
-        const id = req.query.id
+        const id = req.params.id
         const validateData = getTopicSchema.parse({ id })
 
         const topic = await getTopicById(validateData)
@@ -126,7 +124,7 @@ export const handleGetTopicById = async (req: Request, res: Response) => {
 
 export const handleGetTopicPreview = async (req: Request, res: Response) => {
     try {
-        const id = req.query.id
+        const id = req.params.id
         const validateData = getTopicSchema.parse({ id })
 
         const preview = await getTopicPreview(validateData)

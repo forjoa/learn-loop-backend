@@ -5,8 +5,8 @@ import { createMessage, getMessages } from './message.service.ts'
 
 export const handleCreateMessage = async (req: Request, res: Response) => {
     try {
-        // validate request body with zod
-        const validateData = createMessageSchema.parse(req.body)
+        // validate request body with zod, taking the chat id from the URL path
+        const validateData = createMessageSchema.parse({ ...req.body, chatId: req.params.chatId })
 
         // call service to create a message
         const message = await createMessage(validateData)
@@ -22,7 +22,7 @@ export const handleCreateMessage = async (req: Request, res: Response) => {
 
 export const handleGetMessages = async (req: Request, res: Response) => {
     try {
-        const chatId = req.query.chatId
+        const chatId = req.params.chatId
         // validate request body with zod
         const validateData = getMessagesSchema.parse({ chatId })
 

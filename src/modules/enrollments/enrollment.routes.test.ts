@@ -36,7 +36,7 @@ vi.mock('../../config/db.ts', () => ({
 const httpServer = (await import('../../app.ts')).default
 const authHeader = `Bearer ${generateToken('student-1', 'STUDENT')}`
 
-describe('POST /enrollments/create (protected route)', () => {
+describe('POST /enrollments (protected route)', () => {
     beforeEach(() => {
         vi.clearAllMocks()
         prismaMock.topic.findUnique.mockResolvedValue({ ownerId: 'owner-1', title: 'Algebra' })
@@ -53,7 +53,7 @@ describe('POST /enrollments/create (protected route)', () => {
         })
 
         const response = await request(httpServer)
-            .post('/enrollments/create')
+            .post('/enrollments')
             .set('Authorization', authHeader)
             .send({ userId: 'student-1', topicId: 'topic-1' })
 
@@ -68,7 +68,7 @@ describe('POST /enrollments/create (protected route)', () => {
         prismaMock.enrollment.findFirst.mockResolvedValue({ id: 'enr-1', status: 'PENDING' })
 
         const response = await request(httpServer)
-            .post('/enrollments/create')
+            .post('/enrollments')
             .set('Authorization', authHeader)
             .send({ userId: 'student-1', topicId: 'topic-1' })
 
@@ -81,7 +81,7 @@ describe('POST /enrollments/create (protected route)', () => {
         prismaMock.enrollment.findFirst.mockResolvedValue({ id: 'enr-1', status: 'APPROVED' })
 
         const response = await request(httpServer)
-            .post('/enrollments/create')
+            .post('/enrollments')
             .set('Authorization', authHeader)
             .send({ userId: 'student-1', topicId: 'topic-1' })
 
@@ -95,7 +95,7 @@ describe('POST /enrollments/create (protected route)', () => {
         prismaMock.enrollment.update.mockResolvedValue({ id: 'enr-1', status: 'PENDING' })
 
         const response = await request(httpServer)
-            .post('/enrollments/create')
+            .post('/enrollments')
             .set('Authorization', authHeader)
             .send({ userId: 'student-1', topicId: 'topic-1' })
 
@@ -108,7 +108,7 @@ describe('POST /enrollments/create (protected route)', () => {
     })
 })
 
-describe('GET /enrollments/status (protected route)', () => {
+describe('GET /enrollments?userId=&topicId= (protected route)', () => {
     beforeEach(() => {
         vi.clearAllMocks()
     })
@@ -117,7 +117,7 @@ describe('GET /enrollments/status (protected route)', () => {
         prismaMock.enrollment.findFirst.mockResolvedValue({ id: 'enr-1', status: 'PENDING' })
 
         const response = await request(httpServer)
-            .get('/enrollments/status?userId=student-1&topicId=topic-1')
+            .get('/enrollments?userId=student-1&topicId=topic-1')
             .set('Authorization', authHeader)
 
         expect(response.status).toBe(200)
@@ -128,7 +128,7 @@ describe('GET /enrollments/status (protected route)', () => {
         prismaMock.enrollment.findFirst.mockResolvedValue(null)
 
         const response = await request(httpServer)
-            .get('/enrollments/status?userId=student-1&topicId=topic-1')
+            .get('/enrollments?userId=student-1&topicId=topic-1')
             .set('Authorization', authHeader)
 
         expect(response.status).toBe(200)
@@ -136,7 +136,7 @@ describe('GET /enrollments/status (protected route)', () => {
     })
 })
 
-describe('GET /enrollments/pending (protected route)', () => {
+describe('GET /topics/:topicId/enrollments (protected route)', () => {
     beforeEach(() => {
         vi.clearAllMocks()
     })
@@ -146,9 +146,7 @@ describe('GET /enrollments/pending (protected route)', () => {
             { id: 'enr-1', user: { id: 'student-1', name: 'Student One', email: 's@x.com', photo: 'ant.png' } },
         ])
 
-        const response = await request(httpServer)
-            .get('/enrollments/pending?topicId=topic-1')
-            .set('Authorization', authHeader)
+        const response = await request(httpServer).get('/topics/topic-1/enrollments').set('Authorization', authHeader)
 
         expect(response.status).toBe(200)
         expect(response.body).toHaveLength(1)
@@ -156,5 +154,74 @@ describe('GET /enrollments/pending (protected route)', () => {
             where: { topicId: 'topic-1', status: 'PENDING' },
             select: { id: true, user: { select: { id: true, name: true, email: true, photo: true } } },
         })
+    })
+})
+
+describe('PATCH /enrollments/:id (protected route)', () => {
+    beforeEach(() => {
+        vi.clearAllMocks()
+    })
+
+    it('accepts an enrollment and creates the chat membership when status is APPROVED', async () => {
+        prismaMock.enrollment.update.mockResolvedValue({
+            id: 'enr-1',
+            userId: 'student-1',
+            topicId: 'topic-1',
+            status: 'APPROVED',
+            topic: { title: 'Algebra' },
+        })
+        prismaMock.chat.findFirst.mockResolvedValue({ id: 'chat-1', topicId: 'topic-1' })
+
+        const response = await request(httpServer)
+            .patch('/enrollments/enr-1')
+            .set('Authorization', authHeader)
+            .send({ status: 'APPROVED' })
+
+        expect(response.status).toBe(200)
+        expect(response.body.message).toBe('Enrollment accepted successfully')
+        expect(prismaMock.enrollment.update).toHaveBeenCalledWith({
+            where: { id: 'enr-1' },
+            data: { id: 'enr-1', status: 'APPROVED' },
+            include: { topic: { select: { title: true } } },
+        })
+        expect(prismaMock.chat_member.create).toHaveBeenCalledWith({
+            data: { userId: 'student-1', chatId: 'chat-1' },
+        })
+        expect(prismaMock.notification.create).toHaveBeenCalledWith(
+            expect.objectContaining({ data: expect.objectContaining({ title: 'Solicitud aceptada' }) }),
+        )
+    })
+
+    it('denies an enrollment without creating a chat membership when status is REJECTED', async () => {
+        prismaMock.enrollment.update.mockResolvedValue({
+            id: 'enr-1',
+            userId: 'student-1',
+            topicId: 'topic-1',
+            status: 'REJECTED',
+            topic: { title: 'Algebra' },
+        })
+
+        const response = await request(httpServer)
+            .patch('/enrollments/enr-1')
+            .set('Authorization', authHeader)
+            .send({ status: 'REJECTED' })
+
+        expect(response.status).toBe(200)
+        expect(response.body.message).toBe('Enrollment denied successfully')
+        expect(prismaMock.chat_member.create).not.toHaveBeenCalled()
+        expect(prismaMock.notification.create).toHaveBeenCalledWith(
+            expect.objectContaining({ data: expect.objectContaining({ title: 'Solicitud rechazada' }) }),
+        )
+    })
+
+    it('rejects an unsupported status with a 400 before touching the database', async () => {
+        const response = await request(httpServer)
+            .patch('/enrollments/enr-1')
+            .set('Authorization', authHeader)
+            .send({ status: 'PENDING' })
+
+        expect(response.status).toBe(400)
+        expect(response.body.success).toBe(false)
+        expect(prismaMock.enrollment.update).not.toHaveBeenCalled()
     })
 })

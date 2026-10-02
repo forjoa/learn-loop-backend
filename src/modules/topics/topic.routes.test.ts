@@ -88,5 +88,16 @@ describe('GET /topics (protected route)', () => {
 
         expect(response.status).toBe(200)
         expect(response.body).toEqual([{ id: 'topic-1', title: 'Algebra' }])
+        expect(prismaMock.topic.findMany).toHaveBeenCalledWith()
+    })
+
+    it('filters by owner when ?ownerId= is present', async () => {
+        prismaMock.topic.findMany.mockResolvedValue([{ id: 'topic-1', title: 'Algebra' }])
+
+        const response = await request(httpServer).get('/topics?ownerId=owner-1').set('Authorization', authHeader)
+
+        expect(response.status).toBe(201)
+        expect(response.body).toEqual([{ id: 'topic-1', title: 'Algebra' }])
+        expect(prismaMock.topic.findMany).toHaveBeenCalledWith({ where: { ownerId: 'owner-1' } })
     })
 })

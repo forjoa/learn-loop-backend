@@ -22,6 +22,15 @@ export const denyEnrollmentSchema = z.object({
 
 export type DenyEnrollmentSchema = z.infer<typeof denyEnrollmentSchema>
 
+// PATCH /enrollments/:id - the single entry point that replaces the old
+// /accept and /deny endpoints; it dispatches to acceptEnrollment/denyEnrollment.
+export const updateEnrollmentStatusSchema = z.object({
+    id: z.string(),
+    status: z.enum(['APPROVED', 'REJECTED']),
+})
+
+export type UpdateEnrollmentStatusSchema = z.infer<typeof updateEnrollmentStatusSchema>
+
 export const getEnrollmentStatusSchema = z.object({
     userId: z.string(),
     topicId: z.string(),

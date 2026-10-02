@@ -8,10 +8,8 @@ import { Server } from 'socket.io'
 import { auth } from './middleware/auth.ts'
 import authRoute from './modules/auth/auth.route.ts'
 import chatRoutes from './modules/chat/chat.routes.ts'
-import chatMemberRoutes from './modules/chatMembers/chatMember.routes.ts'
 import enrollmentRoutes from './modules/enrollments/enrollment.routes.ts'
 import filesRoutes from './modules/files/files.routes.ts'
-import messageRoutes from './modules/messages/message.routes.ts'
 import notificationRoutes from './modules/notifications/notification.routes.ts'
 import postRoutes from './modules/posts/post.routes.ts'
 import topicPublicRoutes from './modules/topics/topic.public.routes.ts'
@@ -34,8 +32,6 @@ app.use(auth)
 app.use('/users', userRoutes)
 app.use('/topics', topicRoutes)
 app.use('/enrollments', enrollmentRoutes)
-app.use('/chatMembers', chatMemberRoutes)
-app.use('/messages', messageRoutes)
 app.use('/notifications', notificationRoutes)
 app.use('/chats', chatRoutes)
 app.use('/posts', postRoutes)

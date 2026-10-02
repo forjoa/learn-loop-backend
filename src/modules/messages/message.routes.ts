@@ -1,11 +1,13 @@
 import { Router } from 'express'
 import { handleCreateMessage, handleGetMessages } from './message.controller.ts'
 
-const router = Router()
+// Mounted at /chats/:chatId/messages by the chat router, so mergeParams is
+// required for these handlers to see :chatId.
+export const chatMessageRouter = Router({ mergeParams: true })
 
 // @ts-expect-error
-router.post('/send', handleCreateMessage)
+chatMessageRouter.post('/', handleCreateMessage)
 // @ts-expect-error
-router.get('/get', handleGetMessages)
+chatMessageRouter.get('/', handleGetMessages)
 
-export default router
+export default chatMessageRouter

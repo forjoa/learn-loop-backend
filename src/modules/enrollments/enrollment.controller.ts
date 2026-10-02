@@ -1,11 +1,10 @@
 import type { Request, Response } from 'express'
 import { errorHandler } from '../../lib/utils.ts'
 import {
-    acceptEnrollmentSchema,
     createEnrollmentSchema,
-    denyEnrollmentSchema,
     getEnrollmentStatusSchema,
     getPendingEnrollmentsSchema,
+    updateEnrollmentStatusSchema,
 } from './enrollment.model.ts'
 import {
     acceptEnrollment,
@@ -32,30 +31,23 @@ export const handleCreateEnrollment = async (req: Request, res: Response) => {
     }
 }
 
-export const handleAcceptEnrollment = async (req: Request, res: Response) => {
+export const handleUpdateEnrollmentStatus = async (req: Request, res: Response) => {
     try {
-        // validate request body using zod
-        const validateData = acceptEnrollmentSchema.parse(req.body)
+        // validate the id from the URL path and the status from the body using zod
+        const validateData = updateEnrollmentStatusSchema.parse({ id: req.params.id, status: req.body?.status })
 
-        // call service to accept
-        const enrollment = await acceptEnrollment(validateData)
+        if (validateData.status === 'APPROVED') {
+            // call service to accept
+            const enrollment = await acceptEnrollment({ id: validateData.id, status: 'APPROVED' })
 
-        return res.status(200).json({
-            message: 'Enrollment accepted successfully',
-            data: enrollment,
-        })
-    } catch (error) {
-        errorHandler(res, error)
-    }
-}
-
-export const handleDenyEnrollment = async (req: Request, res: Response) => {
-    try {
-        // validate request body using zod
-        const validateData = denyEnrollmentSchema.parse(req.body)
+            return res.status(200).json({
+                message: 'Enrollment accepted successfully',
+                data: enrollment,
+            })
+        }
 
         // call service to deny
-        const enrollment = await denyEnrollment(validateData)
+        const enrollment = await denyEnrollment({ id: validateData.id, status: 'REJECTED' })
 
         return res.status(200).json({
             message: 'Enrollment denied successfully',
@@ -82,7 +74,7 @@ export const handleGetEnrollmentStatus = async (req: Request, res: Response) => 
 
 export const handleGetPendingEnrollments = async (req: Request, res: Response) => {
     try {
-        const topicId = req.query.topicId
+        const topicId = req.params.topicId
         const validateData = getPendingEnrollmentsSchema.parse({ topicId })
 
         const enrollments = await getPendingEnrollmentsByTopic(validateData)

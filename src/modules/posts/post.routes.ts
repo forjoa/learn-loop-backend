@@ -6,6 +6,6 @@ const router = Router()
 // @ts-expect-error
 router.post('/', handleCreatePost)
 // @ts-expect-error
-router.get('/', handleGetSinglePost)
+router.get('/:id', handleGetSinglePost)
 
 export default router

@@ -1,23 +1,24 @@
 import { Router } from 'express'
 import {
-    handleAcceptEnrollment,
     handleCreateEnrollment,
-    handleDenyEnrollment,
     handleGetEnrollmentStatus,
     handleGetPendingEnrollments,
+    handleUpdateEnrollmentStatus,
 } from './enrollment.controller.ts'
 
 const router = Router()
 
 // @ts-expect-error
-router.post('/create', handleCreateEnrollment)
+router.post('/', handleCreateEnrollment)
 // @ts-expect-error
-router.post('/accept', handleAcceptEnrollment)
+router.get('/', handleGetEnrollmentStatus)
 // @ts-expect-error
-router.post('/deny', handleDenyEnrollment)
-// @ts-expect-error
-router.get('/status', handleGetEnrollmentStatus)
-// @ts-expect-error
-router.get('/pending', handleGetPendingEnrollments)
+router.patch('/:id', handleUpdateEnrollmentStatus)
 
 export default router
+
+// GET /topics/:topicId/enrollments - mounted by the topics router
+export const topicEnrollmentRouter = Router({ mergeParams: true })
+
+// @ts-expect-error
+topicEnrollmentRouter.get('/', handleGetPendingEnrollments)

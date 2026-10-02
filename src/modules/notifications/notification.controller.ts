@@ -22,7 +22,7 @@ export const handleCreateNotification = async (req: Request, res: Response) => {
 
 export const handleGetNotifications = async (req: Request, res: Response) => {
     try {
-        const userId = req.query.userId
+        const userId = req.params.userId
         // validate request body with zod
         const validateData = getNotificationsSchema.parse({ userId })
 
@@ -37,7 +37,7 @@ export const handleGetNotifications = async (req: Request, res: Response) => {
 
 export const handleDeleteNotification = async (req: Request, res: Response) => {
     try {
-        const id = req.query.id
+        const id = req.params.id
         // validate request body with zod
         const validateData = deleteNotificationSchema.parse({ id })
 

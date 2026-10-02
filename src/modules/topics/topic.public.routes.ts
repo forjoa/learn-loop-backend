@@ -6,6 +6,6 @@ const router = Router()
 // Unauthenticated: used by the "join via link" screen before the visitor has an
 // account, or before SecureStore has a token loaded yet.
 // @ts-expect-error
-router.get('/preview', handleGetTopicPreview)
+router.get('/:id', handleGetTopicPreview)
 
 export default router

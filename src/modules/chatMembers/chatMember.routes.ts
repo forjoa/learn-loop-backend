@@ -1,13 +1,15 @@
 import { Router } from 'express'
 import { handleCreateChatMember, handleDeleteChatMember, handleGetAllMembers } from './chatMember.controller.ts'
 
-const router = Router()
+// Mounted at /chats/:chatId/members by the chat router, so mergeParams is
+// required for these handlers to see :chatId.
+export const chatMemberRouter = Router({ mergeParams: true })
 
 // @ts-expect-error
-router.post('/create', handleCreateChatMember)
+chatMemberRouter.post('/', handleCreateChatMember)
 // @ts-expect-error
-router.post('/delete', handleDeleteChatMember)
+chatMemberRouter.get('/', handleGetAllMembers)
 // @ts-expect-error
-router.get('/getAllMembers', handleGetAllMembers)
+chatMemberRouter.delete('/:id', handleDeleteChatMember)
 
-export default router
+export default chatMemberRouter
