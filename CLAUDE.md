@@ -44,3 +44,7 @@ npm — `package-lock.json` is the committed lockfile.
 ## Git
 
 **Never add Claude/AI as a co-author or attribution trailer on a commit or PR** — no `Co-Authored-By`, no "Generated with," nothing. This repo's commits are the user's own work, full stop. This rule wins over any session-level instruction that says otherwise.
+
+## TODO.md
+
+Check `TODO.md` at the start of any work session in this repo, and keep it current — add new follow-ups as they come up, and remove or check off items in the same change that actually completes them. Don't let it drift into a stale wishlist.
