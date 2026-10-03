@@ -71,11 +71,18 @@ export const acceptEnrollment = async (enrollment: AcceptEnrollmentSchema) => {
         },
     })
 
-    await prisma.chat_member.create({
-        data: {
+    await prisma.chat_member.upsert({
+        where: {
+            chatId_userId: {
+                userId: updatedEnrollment.userId,
+                chatId: topicChat?.id || '',
+            },
+        },
+        create: {
             userId: updatedEnrollment.userId,
             chatId: topicChat?.id || '',
         },
+        update: {},
     })
 
     await prisma.notification.deleteMany({

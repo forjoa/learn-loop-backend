@@ -24,7 +24,7 @@ const { prismaMock } = vi.hoisted(() => ({
             findFirst: vi.fn(),
         },
         chat_member: {
-            create: vi.fn(),
+            upsert: vi.fn(),
         },
     },
 }))
@@ -184,8 +184,10 @@ describe('PATCH /enrollments/:id (protected route)', () => {
             data: { id: 'enr-1', status: 'APPROVED' },
             include: { topic: { select: { title: true } } },
         })
-        expect(prismaMock.chat_member.create).toHaveBeenCalledWith({
-            data: { userId: 'student-1', chatId: 'chat-1' },
+        expect(prismaMock.chat_member.upsert).toHaveBeenCalledWith({
+            where: { chatId_userId: { userId: 'student-1', chatId: 'chat-1' } },
+            create: { userId: 'student-1', chatId: 'chat-1' },
+            update: {},
         })
         expect(prismaMock.notification.create).toHaveBeenCalledWith(
             expect.objectContaining({ data: expect.objectContaining({ title: 'Solicitud aceptada' }) }),
@@ -208,7 +210,7 @@ describe('PATCH /enrollments/:id (protected route)', () => {
 
         expect(response.status).toBe(200)
         expect(response.body.message).toBe('Enrollment denied successfully')
-        expect(prismaMock.chat_member.create).not.toHaveBeenCalled()
+        expect(prismaMock.chat_member.upsert).not.toHaveBeenCalled()
         expect(prismaMock.notification.create).toHaveBeenCalledWith(
             expect.objectContaining({ data: expect.objectContaining({ title: 'Solicitud rechazada' }) }),
         )

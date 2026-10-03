@@ -7,13 +7,31 @@ const { prismaMock } = vi.hoisted(() => ({
         topic: {
             create: vi.fn(),
             findMany: vi.fn(),
+            delete: vi.fn(),
         },
         chat: {
             create: vi.fn(),
+            findMany: vi.fn(),
+            deleteMany: vi.fn(),
         },
         chat_member: {
             create: vi.fn(),
+            deleteMany: vi.fn(),
         },
+        message: {
+            deleteMany: vi.fn(),
+        },
+        post: {
+            findMany: vi.fn(),
+            deleteMany: vi.fn(),
+        },
+        file: {
+            deleteMany: vi.fn(),
+        },
+        enrollment: {
+            deleteMany: vi.fn(),
+        },
+        $transaction: vi.fn((operations: Promise<unknown>[]) => Promise.all(operations)),
     },
 }))
 
@@ -99,5 +117,36 @@ describe('GET /topics (protected route)', () => {
         expect(response.status).toBe(201)
         expect(response.body).toEqual([{ id: 'topic-1', title: 'Algebra' }])
         expect(prismaMock.topic.findMany).toHaveBeenCalledWith({ where: { ownerId: 'owner-1' } })
+    })
+})
+
+describe('DELETE /topics/:id (protected route)', () => {
+    beforeEach(() => {
+        vi.clearAllMocks()
+        prismaMock.$transaction.mockImplementation((operations: Promise<unknown>[]) => Promise.all(operations))
+    })
+
+    it('deletes a topic along with its chats, posts, files and enrollments', async () => {
+        prismaMock.chat.findMany.mockResolvedValue([{ id: 'chat-1' }])
+        prismaMock.post.findMany.mockResolvedValue([{ id: 'post-1' }])
+        prismaMock.message.deleteMany.mockResolvedValue({ count: 2 })
+        prismaMock.chat_member.deleteMany.mockResolvedValue({ count: 1 })
+        prismaMock.chat.deleteMany.mockResolvedValue({ count: 1 })
+        prismaMock.file.deleteMany.mockResolvedValue({ count: 1 })
+        prismaMock.post.deleteMany.mockResolvedValue({ count: 1 })
+        prismaMock.enrollment.deleteMany.mockResolvedValue({ count: 1 })
+        prismaMock.topic.delete.mockResolvedValue({ id: 'topic-1', title: 'Algebra' })
+
+        const response = await request(httpServer).delete('/topics/topic-1').set('Authorization', authHeader)
+
+        expect(response.status).toBe(201)
+        expect(response.body.data).toEqual({ id: 'topic-1', title: 'Algebra' })
+        expect(prismaMock.message.deleteMany).toHaveBeenCalledWith({ where: { chatId: { in: ['chat-1'] } } })
+        expect(prismaMock.chat_member.deleteMany).toHaveBeenCalledWith({ where: { chatId: { in: ['chat-1'] } } })
+        expect(prismaMock.chat.deleteMany).toHaveBeenCalledWith({ where: { topicId: 'topic-1' } })
+        expect(prismaMock.file.deleteMany).toHaveBeenCalledWith({ where: { postId: { in: ['post-1'] } } })
+        expect(prismaMock.post.deleteMany).toHaveBeenCalledWith({ where: { topicId: 'topic-1' } })
+        expect(prismaMock.enrollment.deleteMany).toHaveBeenCalledWith({ where: { topicId: 'topic-1' } })
+        expect(prismaMock.topic.delete).toHaveBeenCalledWith({ where: { id: 'topic-1' } })
     })
 })

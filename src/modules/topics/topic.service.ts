@@ -108,11 +108,29 @@ export const getAllTopicsByUser = async (topic: GetAllTopicsByUser) => {
 }
 
 export const deleteTopic = async (topic: DeleteTopic) => {
-    return prisma.topic.delete({
-        where: {
-            id: topic.id,
-        },
+    const chats = await prisma.chat.findMany({
+        where: { topicId: topic.id },
+        select: { id: true },
     })
+    const chatIds = chats.map((chat) => chat.id)
+
+    const posts = await prisma.post.findMany({
+        where: { topicId: topic.id },
+        select: { id: true },
+    })
+    const postIds = posts.map((post) => post.id)
+
+    const [, , , , , , deletedTopic] = await prisma.$transaction([
+        prisma.message.deleteMany({ where: { chatId: { in: chatIds } } }),
+        prisma.chat_member.deleteMany({ where: { chatId: { in: chatIds } } }),
+        prisma.chat.deleteMany({ where: { topicId: topic.id } }),
+        prisma.file.deleteMany({ where: { postId: { in: postIds } } }),
+        prisma.post.deleteMany({ where: { topicId: topic.id } }),
+        prisma.enrollment.deleteMany({ where: { topicId: topic.id } }),
+        prisma.topic.delete({ where: { id: topic.id } }),
+    ])
+
+    return deletedTopic
 }
 
 export const editTopic = async (topic: EditTopic) => {
