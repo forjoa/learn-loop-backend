@@ -26,3 +26,9 @@ export const editUserSchema = z.object({
 })
 
 export type EditUserInput = z.infer<typeof editUserSchema>
+
+export const deleteUserSchema = z.object({
+    id: z.string(),
+})
+
+export type DeleteUserInput = z.infer<typeof deleteUserSchema>

@@ -1,8 +1,8 @@
 import type { Request, Response } from 'express'
 import { assertSelf } from '../../lib/access.ts'
 import { errorHandler } from '../../lib/utils.ts'
-import { editUserSchema } from './user.model.ts'
-import { editUser } from './user.service.ts'
+import { deleteUserSchema, editUserSchema } from './user.model.ts'
+import { deleteUser, editUser } from './user.service.ts'
 
 export const handleEditUser = async (req: Request, res: Response) => {
     try {
@@ -17,6 +17,20 @@ export const handleEditUser = async (req: Request, res: Response) => {
             message: 'User updated successfully',
             data: user,
         })
+    } catch (error) {
+        errorHandler(res, error)
+    }
+}
+
+export const handleDeleteUser = async (req: Request, res: Response) => {
+    try {
+        const validateData = deleteUserSchema.parse({ id: req.params.id })
+        assertSelf(validateData.id, req.user.userId)
+
+        // call service to delete the user and everything that depends on them
+        await deleteUser(validateData)
+
+        return res.status(200).json({ message: 'User deleted successfully' })
     } catch (error) {
         errorHandler(res, error)
     }

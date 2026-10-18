@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { userChatRouter } from '../chat/chat.routes.ts'
 import { userNotificationRouter } from '../notifications/notification.routes.ts'
 import { userTopicRouter } from '../topics/topic.routes.ts'
-import { handleEditUser } from './user.controller.ts'
+import { handleDeleteUser, handleEditUser } from './user.controller.ts'
 
 const router = Router()
 
@@ -13,5 +13,7 @@ router.use('/:userId/notifications', userNotificationRouter)
 
 // @ts-expect-error
 router.put('/:id', handleEditUser)
+// @ts-expect-error
+router.delete('/:id', handleDeleteUser)
 
 export default router
