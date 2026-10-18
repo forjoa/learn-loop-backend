@@ -22,6 +22,7 @@ export const loginUser = async (input: LoginUserInput) => {
         where: {
             email: input.email,
         },
+        omit: { password: false },
     })
 
     if (!user) {

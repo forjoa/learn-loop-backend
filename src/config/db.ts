@@ -7,6 +7,7 @@ if (!connectionString) {
 }
 
 const adapter = new PrismaPg({ connectionString })
-const prisma = new PrismaClient({ adapter })
+// password is never returned unless a query opts back in with omit: { password: false }
+const prisma = new PrismaClient({ adapter, omit: { user: { password: true } } })
 
 export default prisma
