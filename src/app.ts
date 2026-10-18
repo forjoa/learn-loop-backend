@@ -1,7 +1,6 @@
 import { createServer } from 'node:http'
 import cors from 'cors'
 import express from 'express'
-import OpenAI from 'openai'
 import { Server } from 'socket.io'
 
 // helpers
@@ -34,26 +33,6 @@ app.use('/enrollments', enrollmentRoutes)
 app.use('/notifications', notificationRoutes)
 app.use('/chats', chatRoutes)
 app.use('/posts', postRoutes)
-app.post('/loopy', async (req, res) => {
-    const { message } = req.body
-    const openai = new OpenAI({
-        baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai/',
-        apiKey: env.GEMINI_KEY,
-    })
-
-    const response = await openai.chat.completions.create({
-        model: 'gemini-2.0-flash',
-        messages: [
-            { role: 'system', content: 'You are a helpful assistant.' },
-            {
-                role: 'user',
-                content: message as string,
-            },
-        ],
-    })
-
-    res.send(response.choices[0].message)
-})
 
 // socket init
 const httpServer = createServer(app)
@@ -64,7 +43,6 @@ const io = new Server(httpServer, {
     },
 })
 
-import { env } from './config/env.ts'
 import socketHandler from './socket.ts'
 
 socketHandler(io)

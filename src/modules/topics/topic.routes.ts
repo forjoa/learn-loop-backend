@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { topicEnrollmentRouter } from '../enrollments/enrollment.routes.ts'
+import { topicExamRouter } from '../exams/exam.routes.ts'
 import {
     handleCreateTopic,
     handleDeleteTopic,
@@ -13,6 +14,7 @@ const router = Router()
 
 // topic-scoped collections owned by other modules
 router.use('/:topicId/enrollments', topicEnrollmentRouter)
+router.use('/:topicId/exam', topicExamRouter)
 
 // @ts-expect-error
 router.post('/', handleCreateTopic)
