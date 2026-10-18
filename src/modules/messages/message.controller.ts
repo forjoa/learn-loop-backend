@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express'
+import { assertChatMember } from '../../lib/access.ts'
 import { errorHandler } from '../../lib/utils.ts'
 import { createMessageSchema, getMessagesSchema } from './message.model.ts'
 import { createMessage, getMessages } from './message.service.ts'
@@ -6,7 +7,12 @@ import { createMessage, getMessages } from './message.service.ts'
 export const handleCreateMessage = async (req: Request, res: Response) => {
     try {
         // validate request body with zod, taking the chat id from the URL path
-        const validateData = createMessageSchema.parse({ ...req.body, chatId: req.params.chatId })
+        const validateData = createMessageSchema.parse({
+            ...req.body,
+            chatId: req.params.chatId,
+            senderId: req.user.userId,
+        })
+        await assertChatMember(validateData.chatId, req.user.userId)
 
         // call service to create a message
         const message = await createMessage(validateData)
@@ -25,6 +31,7 @@ export const handleGetMessages = async (req: Request, res: Response) => {
         const chatId = req.params.chatId
         // validate request body with zod
         const validateData = getMessagesSchema.parse({ chatId })
+        await assertChatMember(validateData.chatId, req.user.userId)
 
         // call service to get all conversation messages
         const messages = await getMessages(validateData)

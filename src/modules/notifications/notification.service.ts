@@ -1,13 +1,5 @@
 import prisma from '../../config/db.ts'
-import type {
-    CreateNotificationSchema,
-    DeleteNotificationSchema,
-    GetNotificationsSchema,
-} from './notification.model.ts'
-
-export const createNotification = async (notification: CreateNotificationSchema) => {
-    return prisma.notification.create({ data: notification })
-}
+import type { DeleteNotificationSchema, GetNotificationsSchema } from './notification.model.ts'
 
 export const getNofitications = async (notification: GetNotificationsSchema) => {
     return prisma.notification.findMany({

@@ -6,6 +6,7 @@ const { prismaMock } = vi.hoisted(() => ({
     prismaMock: {
         topic: {
             create: vi.fn(),
+            findFirst: vi.fn(),
             findMany: vi.fn(),
             delete: vi.fn(),
         },
@@ -82,6 +83,20 @@ describe('POST /topics (protected route)', () => {
         })
     })
 
+    it('takes the owner from the token, ignoring any ownerId in the body', async () => {
+        prismaMock.topic.create.mockResolvedValue({ id: 'topic-1' })
+        prismaMock.chat.create.mockResolvedValue({ id: 'chat-1' })
+
+        await request(httpServer)
+            .post('/topics')
+            .set('Authorization', authHeader)
+            .send({ title: 'Algebra', description: 'Intro to algebra', ownerId: 'someone-else' })
+
+        expect(prismaMock.topic.create).toHaveBeenCalledWith({
+            data: { title: 'Algebra', description: 'Intro to algebra', ownerId: 'owner-1' },
+        })
+    })
+
     it('rejects a missing title with a 400 before touching the database', async () => {
         const response = await request(httpServer)
             .post('/topics')
@@ -124,6 +139,20 @@ describe('DELETE /topics/:id (protected route)', () => {
     beforeEach(() => {
         vi.clearAllMocks()
         prismaMock.$transaction.mockImplementation((operations: Promise<unknown>[]) => Promise.all(operations))
+        prismaMock.topic.findFirst.mockResolvedValue({ id: 'topic-1' })
+    })
+
+    it('returns 403 and deletes nothing when the caller does not own the topic', async () => {
+        prismaMock.topic.findFirst.mockResolvedValue(null)
+
+        const response = await request(httpServer).delete('/topics/topic-1').set('Authorization', authHeader)
+
+        expect(response.status).toBe(403)
+        expect(prismaMock.topic.findFirst).toHaveBeenCalledWith({
+            where: { id: 'topic-1', ownerId: 'owner-1' },
+            select: { id: true },
+        })
+        expect(prismaMock.$transaction).not.toHaveBeenCalled()
     })
 
     it('deletes a topic along with its chats, posts, files and enrollments', async () => {

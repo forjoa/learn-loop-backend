@@ -10,8 +10,19 @@ export const generateToken = (userId: string, role: string) => {
     return jwt.sign({ userId, role }, secret, { expiresIn })
 }
 
+export class HttpError extends Error {
+    status: number
+
+    constructor(status: number, message: string) {
+        super(message)
+        this.status = status
+    }
+}
+
 export const errorHandler = (res: Response, error: unknown) => {
-    if (error instanceof ZodError) {
+    if (error instanceof HttpError) {
+        res.status(error.status).json({ success: false, message: error.message })
+    } else if (error instanceof ZodError) {
         res.status(400).json({ success: false, message: error.issues[0].message })
     } else if (error instanceof Error) {
         res.status(400).json({ success: false, message: error.message })

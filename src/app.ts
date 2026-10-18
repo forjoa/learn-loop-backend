@@ -9,7 +9,6 @@ import { auth } from './middleware/auth.ts'
 import authRoute from './modules/auth/auth.route.ts'
 import chatRoutes from './modules/chat/chat.routes.ts'
 import enrollmentRoutes from './modules/enrollments/enrollment.routes.ts'
-import filesRoutes from './modules/files/files.routes.ts'
 import notificationRoutes from './modules/notifications/notification.routes.ts'
 import postRoutes from './modules/posts/post.routes.ts'
 import topicPublicRoutes from './modules/topics/topic.public.routes.ts'
@@ -35,7 +34,6 @@ app.use('/enrollments', enrollmentRoutes)
 app.use('/notifications', notificationRoutes)
 app.use('/chats', chatRoutes)
 app.use('/posts', postRoutes)
-app.use('/files', filesRoutes)
 app.post('/loopy', async (req, res) => {
     const { message } = req.body
     const openai = new OpenAI({

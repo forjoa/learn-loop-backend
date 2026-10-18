@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express'
+import { assertSelf, assertTopicAccess, assertTopicOwner } from '../../lib/access.ts'
 import { errorHandler } from '../../lib/utils.ts'
 import {
     createTopicSchema,
@@ -22,7 +23,7 @@ import {
 export const handleCreateTopic = async (req: Request, res: Response) => {
     try {
         // validate request body using zod
-        const validateData = createTopicSchema.parse(req.body)
+        const validateData = createTopicSchema.parse({ ...req.body, ownerId: req.user.userId })
 
         // call service to create a topic
         const topic = await createTopic(validateData)
@@ -64,6 +65,7 @@ export const handleGetAllTopicsByUser = async (req: Request, res: Response) => {
         const userId = req.params.userId
         // validate request body using zod
         const validateData = getAllTopicsByUserSchema.parse({ userId })
+        assertSelf(validateData.userId, req.user.userId)
 
         // call service to get all topics by user
         const topics = await getAllTopicsByUser(validateData)
@@ -79,6 +81,7 @@ export const handleDeleteTopic = async (req: Request, res: Response) => {
         const id = req.params.id
         // validate request body using zod
         const validateData = deleteTopicSchema.parse({ id })
+        await assertTopicOwner(validateData.id, req.user.userId)
 
         // call service to delete a topic
         const topic = await deleteTopic(validateData)
@@ -95,7 +98,8 @@ export const handleDeleteTopic = async (req: Request, res: Response) => {
 export const handleEditTopic = async (req: Request, res: Response) => {
     try {
         // validate request body using zod, taking the id from the URL path
-        const validateData = editTopicSchema.parse({ ...req.body, id: req.params.id })
+        const validateData = editTopicSchema.parse({ ...req.body, id: req.params.id, ownerId: req.user.userId })
+        await assertTopicOwner(validateData.id, req.user.userId)
 
         // call service to edit a topic
         const topic = await editTopic(validateData)
@@ -113,6 +117,7 @@ export const handleGetTopicById = async (req: Request, res: Response) => {
     try {
         const id = req.params.id
         const validateData = getTopicSchema.parse({ id })
+        await assertTopicAccess(validateData.id, req.user.userId)
 
         const topic = await getTopicById(validateData)
 

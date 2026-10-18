@@ -1,14 +1,8 @@
 import { Router } from 'express'
-import {
-    handleCreateNotification,
-    handleDeleteNotification,
-    handleGetNotifications,
-} from './notification.controller.ts'
+import { handleDeleteNotification, handleGetNotifications } from './notification.controller.ts'
 
 const router = Router()
 
-// @ts-expect-error
-router.post('/', handleCreateNotification)
 // @ts-expect-error
 router.delete('/:id', handleDeleteNotification)
 

@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express'
+import { assertChatMember, assertSelf } from '../../lib/access.ts'
 import { errorHandler } from '../../lib/utils.ts'
 import { getChatByIdSchema, getChatsSchema } from './chat.model.ts'
 import { getChatById, getChats } from './chat.service.ts'
@@ -7,6 +8,7 @@ export const handleGetChats = async (req: Request, res: Response) => {
     try {
         const userId = req.params.userId
         const validateData = getChatsSchema.parse({ userId })
+        assertSelf(validateData.userId, req.user.userId)
 
         const chats = await getChats(validateData)
 
@@ -20,6 +22,7 @@ export const handleGetChatById = async (req: Request, res: Response) => {
     try {
         const id = req.params.id
         const validateData = getChatByIdSchema.parse({ id })
+        await assertChatMember(validateData.id, req.user.userId)
 
         const chat = await getChatById(validateData)
         if (!chat) {

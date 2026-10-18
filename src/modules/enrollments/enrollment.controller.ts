@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express'
+import { assertEnrollmentTopicOwner, assertTopicOwner } from '../../lib/access.ts'
 import { errorHandler } from '../../lib/utils.ts'
 import {
     createEnrollmentSchema,
@@ -17,7 +18,7 @@ import {
 export const handleCreateEnrollment = async (req: Request, res: Response) => {
     try {
         // validate request body using zod
-        const validateData = createEnrollmentSchema.parse(req.body)
+        const validateData = createEnrollmentSchema.parse({ ...req.body, userId: req.user.userId })
 
         // call service to create and enrollment
         const enrollment = await createEnrollment(validateData)
@@ -35,6 +36,7 @@ export const handleUpdateEnrollmentStatus = async (req: Request, res: Response) 
     try {
         // validate the id from the URL path and the status from the body using zod
         const validateData = updateEnrollmentStatusSchema.parse({ id: req.params.id, status: req.body?.status })
+        await assertEnrollmentTopicOwner(validateData.id, req.user.userId)
 
         if (validateData.status === 'APPROVED') {
             // call service to accept
@@ -60,9 +62,8 @@ export const handleUpdateEnrollmentStatus = async (req: Request, res: Response) 
 
 export const handleGetEnrollmentStatus = async (req: Request, res: Response) => {
     try {
-        const userId = req.query.userId
         const topicId = req.query.topicId
-        const validateData = getEnrollmentStatusSchema.parse({ userId, topicId })
+        const validateData = getEnrollmentStatusSchema.parse({ userId: req.user.userId, topicId })
 
         const status = await getEnrollmentStatus(validateData)
 
@@ -76,6 +77,7 @@ export const handleGetPendingEnrollments = async (req: Request, res: Response) =
     try {
         const topicId = req.params.topicId
         const validateData = getPendingEnrollmentsSchema.parse({ topicId })
+        await assertTopicOwner(validateData.topicId, req.user.userId)
 
         const enrollments = await getPendingEnrollmentsByTopic(validateData)
 

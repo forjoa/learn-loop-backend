@@ -6,6 +6,7 @@ const { prismaMock } = vi.hoisted(() => ({
     prismaMock: {
         topic: {
             findUnique: vi.fn(),
+            findFirst: vi.fn(),
         },
         user: {
             findUnique: vi.fn(),
@@ -62,6 +63,20 @@ describe('POST /enrollments (protected route)', () => {
         expect(prismaMock.notification.create).toHaveBeenCalledWith(
             expect.objectContaining({ data: expect.objectContaining({ userId: 'owner-1', enrollmentId: 'enr-1' }) }),
         )
+    })
+
+    it('enrolls the caller from the token, ignoring any userId in the body', async () => {
+        prismaMock.enrollment.findFirst.mockResolvedValue(null)
+        prismaMock.enrollment.create.mockResolvedValue({ id: 'enr-1' })
+
+        await request(httpServer)
+            .post('/enrollments')
+            .set('Authorization', authHeader)
+            .send({ userId: 'someone-else', topicId: 'topic-1' })
+
+        expect(prismaMock.enrollment.create).toHaveBeenCalledWith({
+            data: { userId: 'student-1', topicId: 'topic-1', status: 'PENDING' },
+        })
     })
 
     it('does not create a duplicate row when a PENDING request already exists', async () => {
@@ -124,6 +139,18 @@ describe('GET /enrollments?userId=&topicId= (protected route)', () => {
         expect(response.body).toEqual({ id: 'enr-1', status: 'PENDING' })
     })
 
+    it("only looks up the caller's own enrollment, ignoring ?userId=", async () => {
+        prismaMock.enrollment.findFirst.mockResolvedValue(null)
+
+        await request(httpServer)
+            .get('/enrollments?userId=someone-else&topicId=topic-1')
+            .set('Authorization', authHeader)
+
+        expect(prismaMock.enrollment.findFirst).toHaveBeenCalledWith(
+            expect.objectContaining({ where: { userId: 'student-1', topicId: 'topic-1' } }),
+        )
+    })
+
     it('returns null when the user never requested to join', async () => {
         prismaMock.enrollment.findFirst.mockResolvedValue(null)
 
@@ -141,7 +168,17 @@ describe('GET /topics/:topicId/enrollments (protected route)', () => {
         vi.clearAllMocks()
     })
 
+    it('returns 403 when the caller does not own the topic', async () => {
+        prismaMock.topic.findFirst.mockResolvedValue(null)
+
+        const response = await request(httpServer).get('/topics/topic-1/enrollments').set('Authorization', authHeader)
+
+        expect(response.status).toBe(403)
+        expect(prismaMock.enrollment.findMany).not.toHaveBeenCalled()
+    })
+
     it('returns pending enrollments for a topic', async () => {
+        prismaMock.topic.findFirst.mockResolvedValue({ id: 'topic-1' })
         prismaMock.enrollment.findMany.mockResolvedValue([
             { id: 'enr-1', user: { id: 'student-1', name: 'Student One', email: 's@x.com', photo: 'ant.png' } },
         ])
@@ -160,6 +197,24 @@ describe('GET /topics/:topicId/enrollments (protected route)', () => {
 describe('PATCH /enrollments/:id (protected route)', () => {
     beforeEach(() => {
         vi.clearAllMocks()
+        // access check: the caller owns the enrollment's topic
+        prismaMock.enrollment.findFirst.mockResolvedValue({ id: 'enr-1' })
+    })
+
+    it("returns 403 and changes nothing when the caller does not own the enrollment's topic", async () => {
+        prismaMock.enrollment.findFirst.mockResolvedValue(null)
+
+        const response = await request(httpServer)
+            .patch('/enrollments/enr-1')
+            .set('Authorization', authHeader)
+            .send({ status: 'APPROVED' })
+
+        expect(response.status).toBe(403)
+        expect(prismaMock.enrollment.findFirst).toHaveBeenCalledWith({
+            where: { id: 'enr-1', topic: { ownerId: 'student-1' } },
+            select: { id: true },
+        })
+        expect(prismaMock.enrollment.update).not.toHaveBeenCalled()
     })
 
     it('accepts an enrollment and creates the chat membership when status is APPROVED', async () => {

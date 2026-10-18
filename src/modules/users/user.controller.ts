@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express'
+import { assertSelf } from '../../lib/access.ts'
 import { errorHandler } from '../../lib/utils.ts'
 import { editUserSchema } from './user.model.ts'
 import { editUser } from './user.service.ts'
@@ -7,6 +8,7 @@ export const handleEditUser = async (req: Request, res: Response) => {
     try {
         // validate request body using zod, taking the id from the URL path
         const validateData = editUserSchema.parse({ ...req.body, id: req.params.id })
+        assertSelf(validateData.id, req.user.userId)
 
         // call service to create user
         const user = await editUser(validateData)
