@@ -68,5 +68,6 @@ import { env } from './config/env.ts'
 import socketHandler from './socket.ts'
 
 socketHandler(io)
+app.set('io', io)
 
 export default httpServer

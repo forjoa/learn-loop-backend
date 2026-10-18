@@ -16,6 +16,7 @@ export const handleCreateMessage = async (req: Request, res: Response) => {
 
         // call service to create a message
         const message = await createMessage(validateData)
+        req.app.get('io').to(validateData.chatId).emit('chatMessage', message)
 
         return res.status(200).json({
             message: 'Message created successfully',

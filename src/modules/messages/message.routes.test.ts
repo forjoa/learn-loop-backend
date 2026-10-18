@@ -1,3 +1,4 @@
+import { Server } from 'socket.io'
 import request from 'supertest'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { generateToken } from '../../lib/utils.ts'
@@ -42,6 +43,8 @@ describe('/chats/:chatId/messages (protected route)', () => {
 
     it('sends as the caller from the token, ignoring any senderId in the body', async () => {
         prismaMock.message.create.mockResolvedValue({ id: 'msg-1' })
+        const emit = vi.fn()
+        const to = vi.spyOn(Server.prototype, 'to').mockReturnValue({ emit } as never)
 
         const response = await request(httpServer)
             .post('/chats/chat-1/messages')
@@ -52,5 +55,8 @@ describe('/chats/:chatId/messages (protected route)', () => {
         expect(prismaMock.message.create).toHaveBeenCalledWith(
             expect.objectContaining({ data: { chatId: 'chat-1', senderId: 'student-1', content: 'hola' } }),
         )
+        // the saved message is pushed to the chat room by the server, not relayed from the client
+        expect(to).toHaveBeenCalledWith('chat-1')
+        expect(emit).toHaveBeenCalledWith('chatMessage', { id: 'msg-1' })
     })
 })
